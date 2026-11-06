@@ -1,0 +1,27 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+---
+<Layout title="Charges et règlements">
+  <PageHeader title="Vos règlements de charges" kicker="Où en est-on ?" intro="Situation des appels de charges et des règlements reçus, copropriétaire par copropriétaire." image="/images/hero-charges.jpg" focus="47%" />
+  <section class="pad tight"><div class="wrap split">
+    <div style="flex:2 1 520px">
+      <div class="btns" style="margin:0 0 18px"><a class="btn deep zoom" href="/docs/paiements.jpg">Agrandir</a><a class="btn ghost" href="/docs/paiements.jpg" download="paiements-ballarin-b.jpg">Télécharger</a></div>
+      <div class="doc-frame" style="max-width:640px"><img src="/docs/paiements.jpg" alt="Tableau des recettes : montants appelés et réglés par copropriétaire"></div>
+      <p style="font-size:13px;color:var(--muted);margin-top:10px">Document établi par le trésorier du syndicat. Montants en euros.</p>
+    </div>
+    <aside style="flex:1 1 280px">
+      <div class="box">
+        <h3>Comment lire le tableau</h3>
+        <p style="font-size:15px"><b>Montant</b> : règlement de charges reçu pour l'exercice en cours.</p>
+        <p style="font-size:15px"><b>Appel exceptionnel</b> : montant appelé en plus des charges courantes, le cas échéant.</p>
+        <p style="font-size:15px"><b>Internet</b> : participation à l'abonnement collectif, pour les lots qui ont souscrit.</p>
+        <p style="font-size:15px;margin:0"><b>Perçu / Prévu</b> : total encaissé à ce jour, comparé au budget voté en AG.</p>
+      </div>
+      <div class="box note" style="margin-top:20px">
+        <h3>Une question ?</h3>
+        <p style="font-size:15px;margin:0">Le trésorier et le syndic sont à votre disposition par écrit — <a href="/infos#contact">contactez-nous</a>.</p>
+      </div>
+    </aside>
+  </div></section>
+</Layout>

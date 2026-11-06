@@ -1,0 +1,131 @@
+---
+import '../styles/global.css';
+import Flag from '../components/Flag.astro';
+interface Props { title: string; description?: string; nav?: boolean }
+const { title, description = 'Site de la copropriété Résidence Ballarin B, Tiuccia (Corse-du-Sud)', nav = true } = Astro.props;
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const links = [
+  ['/', 'Accueil'], ['/assemblees', 'Assemblées'], ['/charges', 'Charges'],
+  ['/finances', 'Finances'], ['/photos', 'Photos'], ['/infos', 'Infos'],
+];
+const maj = new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>{title} — Résidence Ballarin B</title>
+  <meta name="description" content={description}>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,800;1,9..144,600&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="page">
+  {nav && (
+    <header class="site">
+      <div class="wrap">
+        <a class="brand" href="/" aria-label="Accueil — Résidence Ballarin B">
+          <svg width="38" height="38" viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="22" fill="#F6B93B"/><path d="M8 30c3-2.4 6-2.4 9 0s6 2.4 9 0 6-2.4 9 0" stroke="#0B5C8E" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M12 24l10-9 10 9M15 22v6h14v-6" stroke="#D96C3A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+          Ballarin B
+        </a>
+        <button class="burger" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+        <nav class="main" id="menu" aria-label="Navigation principale">
+          {links.map(([href, label]) => <a href={href} class={path === href ? 'on' : ''}>{label}</a>)}
+          <a href="/deconnexion" class="out">Déconnexion</a>
+        </nav>
+      </div>
+    </header>
+  )}
+
+  <slot />
+
+  <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Image en grand">
+    <div class="bar"><a id="lb-dl" href="#" download>Télécharger</a><button type="button" id="lb-close">Fermer ✕</button></div>
+    <img id="lb-img" alt="">
+  </div>
+
+  <footer class="site">
+    <div class="wrap">
+      <div class="fl">
+        <Flag small />
+        <div class="ft"><b>Résidence Ballarin&nbsp;B</b><span>Tiuccia · 20111&nbsp;Casaglione</span><span>Syndic bénévole · JC.&nbsp;Bonugli</span></div>
+      </div>
+      <div style="font-size:13px;font-weight:700;color:#8A5A1E;text-align:right">© 2023 – {new Date().getFullYear()} · Réservé aux copropriétaires<br>Dernière mise à jour : {maj}</div>
+    </div>
+  </footer>
+</div>
+
+<script>
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Menu burger
+  const b = document.querySelector('.burger'), m = document.getElementById('menu');
+  if (b && m) {
+    b.addEventListener('click', () => { const o = m.classList.toggle('open'); b.setAttribute('aria-expanded', String(o)); });
+    m.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { m.classList.remove('open'); b.setAttribute('aria-expanded', 'false'); }));
+  }
+
+  // Lightbox globale
+  const lb = document.getElementById('lb')!, lbImg = document.getElementById('lb-img') as HTMLImageElement, lbDl = document.getElementById('lb-dl') as HTMLAnchorElement;
+  const openLb = (src: string, alt = '') => { lbImg.src = src; lbImg.alt = alt; lbDl.href = src; lb.classList.add('open'); document.body.style.overflow = 'hidden'; };
+  const closeLb = () => { lb.classList.remove('open'); lbImg.src = ''; document.body.style.overflow = ''; };
+  (window as any).openLightbox = openLb;
+  document.getElementById('lb-close')!.addEventListener('click', closeLb);
+  lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+  document.addEventListener('click', e => {
+    const a = (e.target as HTMLElement).closest('a.zoom, .gal a, .doc-frame a') as HTMLAnchorElement | null;
+    if (a && /\.(jpe?g|png|webp|gif)(\?|$)/i.test(a.href)) { e.preventDefault(); openLb(a.href, a.querySelector('img')?.alt || ''); }
+  });
+
+  // Parallax (éléments [data-speed])
+  const layers = [...document.querySelectorAll<HTMLElement>('[data-speed]')];
+  function tick() {
+    const y = window.scrollY;
+    for (const el of layers) {
+      const s = parseFloat(el.dataset.speed || '0');
+      const sec = el.closest('section') as HTMLElement | null;
+      const rel = y - (sec ? sec.offsetTop : 0);
+      const rot = getComputedStyle(el).getPropertyValue('--rot').trim();
+      el.style.transform = `translate3d(0,${(rel * s).toFixed(1)}px,0)${rot ? ` rotate(${rot})` : ''}`;
+    }
+  }
+  if (!reduce && layers.length) { window.addEventListener('scroll', () => requestAnimationFrame(tick), { passive: true }); tick(); }
+
+  // Apparition au scroll
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Drapeau : onde tissu sur canvas
+  const img = new Image(); img.src = '/images/flag-corse.svg';
+  img.onload = () => {
+    document.querySelectorAll<HTMLCanvasElement>('canvas.flagcv').forEach(cv => {
+      const ctx = cv.getContext('2d')!; ctx.imageSmoothingQuality = 'high';
+      const W = cv.width, H = cv.height, pad = 30, fw = W - pad, fh = H - pad * 2, N = 240, sw = fw / N, iw = img.width / N;
+      const off = document.createElement('canvas'); off.width = W; off.height = H; const oc = off.getContext('2d')!;
+      const t0 = performance.now();
+      const wave = (p: number, t: number) => Math.sin(p * 7.5 - t * 5.2) * (4 + p * 14) + Math.sin(p * 3.1 - t * 2.4) * (4 + p * 14) * .35;
+      function frame(now: number) {
+        const t = (now - t0) / 1000; ctx.clearRect(0, 0, W, H); oc.clearRect(0, 0, W, H);
+        for (let i = 0; i < N; i++) {
+          const p = i / N, y = wave(p, t), dy = (wave(p + 1 / N, t) - y) * N / fw, h = fh * (1 - Math.abs(dy) * .9);
+          oc.drawImage(img, i * iw, 0, iw + 1.5, img.height, pad / 2 + i * sw, pad + y + (fh - h) / 2, sw + 1.2, h);
+        }
+        const g = ctx.createLinearGradient(pad / 2, 0, pad / 2 + fw, 0);
+        for (let k = 0; k <= 40; k++) { const p = k / 40, dy = (wave(p + .01, t) - wave(p, t)) * 100 / fw, s = Math.max(-1, Math.min(1, -dy * 3.2)); g.addColorStop(p, s < 0 ? `rgba(20,30,60,${-s * .32})` : `rgba(255,255,255,${s * .35})`); }
+        ctx.drawImage(off, 0, 0);
+        ctx.globalCompositeOperation = 'source-atop'; ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); ctx.globalCompositeOperation = 'source-over';
+        if (!reduce) requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    });
+  };
+</script>
+</body>
+</html>

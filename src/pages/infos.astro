@@ -1,0 +1,48 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+---
+<Layout title="Infos pratiques">
+  <PageHeader title="Infos pratiques" kicker="Bon à savoir" intro="Parking et portail, carnet d'entretien, communiqué de la mairie, internet et contact du syndic." image="/images/hero-infos.jpg" focus="52%" />
+
+  <section class="pad tight" id="parking"><div class="wrap">
+    <div class="kicker">Stationnement</div>
+    <h2 class="t" style="font-size:30px">Schéma du parking et infos portail</h2>
+    <div class="doc-frame"><a href="/images/shemaparking.jpg" class="zoom"><img src="/images/shemaparking.jpg" alt="Schéma du parking de la résidence" style="min-width:720px"></a></div>
+    <p style="font-size:13px;color:var(--muted);margin-top:10px">Sur mobile, faites glisser le schéma horizontalement. Cliquez pour l'ouvrir en grand.</p>
+  </div></section>
+
+  <section class="pad" style="background:var(--sand)"><div class="wrap">
+    <div class="grid" style="margin-top:0;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
+      <article class="card" id="carnet">
+        <b>Carnet d'entretien</b>
+        <span>Immeuble de 12 logements · Registre des copropriétés n° AH6-835-573. Historique des travaux, contrats et diagnostics (dont le diagnostic amiante).</span>
+        <div class="btns"><a class="btn deep" href="/docs/carnet-entretien.pdf" target="_blank" rel="noopener">Ouvrir le carnet (PDF)</a><a class="btn ghost zoom" href="/images/diagnostic-amiante-high.jpg">Diagnostic amiante</a></div>
+      </article>
+      <article class="card" id="mairie">
+        <b>Communiqué de la mairie</b>
+        <a href="/images/communiquemairiecomplet.jpg" class="zoom"><img src="/images/communiquemairiecomplet.jpg" alt="Communiqué de la mairie de Casaglione" style="border-radius:12px"></a>
+        <span>Cliquez sur l'image pour la lire en grand.</span>
+      </article>
+      <article class="card" id="internet">
+        <b>À propos d'internet</b>
+        <img src="/images/img_1217jpg.jpg" alt="Antenne internet déplacée côté façade" style="border-radius:12px;aspect-ratio:4/3;object-fit:cover">
+        <span>Comme vous pouvez le voir sur la photo, l'antenne côté façade a été déplacée de manière à mieux couvrir la partie avant de l'immeuble.</span>
+      </article>
+    </div>
+  </div></section>
+
+  <section class="pad" id="contact"><div class="wrap split">
+    <div>
+      <div class="kicker">Contact</div>
+      <h2 class="t" style="font-size:30px">Écrire au syndic</h2>
+      <p>Le syndicat est géré bénévolement. Pour toute question sur vos charges, un document ou la vie de la résidence, écrivez-nous — on répond vite.</p>
+      <p style="font-size:15px"><b>Syndic bénévole</b> : JC. Bonugli<br><b>Syndic adjoint</b> : C. Dechen<br><b>Adresse</b> : Résidence Ballarin — Bât. B, Tiuccia, 20111 Casaglione</p>
+      <a class="btn sun" href="mailto:ADRESSE@EXEMPLE.FR?subject=Résidence%20Ballarin%20B">Envoyer un e-mail au syndic</a>
+    </div>
+    <aside class="box note">
+      <h3>Rappel</h3>
+      <p style="font-size:15px;margin:0">Ce site est réservé aux propriétaires de la Résidence et contient des informations personnelles. Merci de ne pas communiquer le mot de passe. Les photos, elles, se partagent librement.</p>
+    </aside>
+  </div></section>
+</Layout>

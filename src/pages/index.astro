@@ -1,0 +1,60 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Flag from '../components/Flag.astro';
+const maj = new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<Layout title="Accueil">
+  <section class="hero" id="top">
+    <div class="layer" data-speed="0.25"><div class="cloud c1"></div><div class="cloud c2"></div></div>
+    <div class="layer" data-speed="0.3"><div class="sea-img"></div></div>
+    <div class="layer"><div class="waves">
+      <svg class="w0" viewBox="0 0 2880 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 40 C240 0 480 0 720 40 S1200 80 1440 40 S1920 0 2160 40 S2640 80 2880 40 V120 H0 Z" fill="#0B5C8E"/></svg>
+      <svg class="w1" viewBox="0 0 2880 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 60 C240 20 480 20 720 60 S1200 100 1440 60 S1920 20 2160 60 S2640 100 2880 60 V120 H0 Z" fill="#2A9DD6"/></svg>
+      <svg class="w2" viewBox="0 0 2880 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 70 C240 40 480 40 720 70 S1200 100 1440 70 S1920 40 2160 70 S2640 100 2880 70 V120 H0 Z" fill="#CFEAF8"/></svg>
+    </div></div>
+    <div class="wrap hero-copy" data-speed="-0.12">
+      <div class="tag"><Flag /><span>Golfe de Tiuccia · Corse-du-Sud</span></div>
+      <h1>Bienvenue à la résidence <em>Ballarin&nbsp;B</em></h1>
+      <p>Le petit site de notre copropriété à Tiuccia : les comptes rendus d'AG, vos règlements, les photos des travaux… et la mer en fond d'écran.</p>
+      <div class="btns"><a class="btn sun" href="/charges">Mes règlements de charges</a><a class="btn ghost light" href="/assemblees">Compte rendu AG 2026</a></div>
+      <div class="maj"><span class="dot"></span><div><b>Dernière mise à jour : {maj}</b><br><span>Paiements de charges et compte rendu de la dernière assemblée en ligne</span></div></div>
+    </div>
+  </section>
+
+  <section class="pad" id="acces"><div class="wrap">
+    <div class="reveal" style="text-align:center"><div class="kicker">Par ici</div><h2 class="t">Qu'est-ce que vous cherchez&nbsp;?</h2></div>
+    <div class="grid">
+      <a class="card sand tilt1 reveal" href="/charges"><b>Mes règlements</b><span>Où en sont les paiements de charges, mois par mois.</span></a>
+      <a class="card blue tilt2 reveal" href="/assemblees"><b>Les assemblées</b><span>Le compte rendu de la dernière AG et les précédents.</span></a>
+      <a class="card peach tilt3 reveal" href="/finances"><b>Les finances</b><span>Trésorerie, provisions et la facture EDF des communs.</span></a>
+      <a class="card olive tilt4 reveal" href="/photos"><b>Les photos</b><span>Ravalement, travaux, et le survol en drone de Tiuccia.</span></a>
+    </div>
+  </div></section>
+
+  <svg class="curve" viewBox="0 0 1440 70" preserveAspectRatio="none" aria-hidden="true" style="background:var(--deep)"><path d="M0 70 C240 0 480 0 720 35 S1200 70 1440 10 V0 H0 Z" fill="#FFF8EC"/></svg>
+  <section class="band" id="entre-nous">
+    <div class="wrap">
+      <div class="photos">
+        <img class="pp pp1" data-speed="0.10" src="/images/img_0323jpg.jpg" alt="Le ravalement de la résidence">
+        <img class="pp pp2" data-speed="-0.14" src="/images/portillon.jpg" alt="Le nouveau portillon">
+        <img class="pp pp3" data-speed="0.18" src="/images/rampes5jpg.jpg" alt="Les nouvelles rampes">
+      </div>
+      <div class="txt reveal">
+        <div class="kicker">Entre nous</div>
+        <h2 class="t">Un site fait maison, pour les 12 familles de la résidence</h2>
+        <p>Vous trouverez ici tout ce dont vous pourriez avoir besoin : le compte rendu de la dernière AG et les précédents, le bilan financier en cours, la situation de vos règlements, et les photos de la résidence avant, pendant et après les travaux.</p>
+        <p><strong style="color:var(--sun)">Petit rappel :</strong> le site est réservé aux propriétaires — gardez le mot de passe pour vous, les photos se partagent librement&nbsp;!</p>
+      </div>
+    </div>
+  </section>
+  <svg class="curve" viewBox="0 0 1440 70" preserveAspectRatio="none" aria-hidden="true" style="background:var(--deep)"><path d="M0 0 C240 70 480 70 720 35 S1200 0 1440 60 V70 H0 Z" fill="#FFF8EC"/></svg>
+
+  <section class="pad" id="nouvelles"><div class="wrap">
+    <div class="reveal"><div class="kicker">Quoi de neuf</div><h2 class="t">Les dernières nouvelles de la résidence</h2></div>
+    <div class="news">
+      <a class="reveal" href="/photos#travaux"><img src="/images/rampes5jpg.jpg" alt="" class="tilt1"><span class="kicker">Travaux récents</span><b>Rampes, portillon et portail : c'est fini&nbsp;!</b></a>
+      <a class="reveal" href="/photos#fuite"><img src="/images/fuite2.jpg" alt="" class="tilt2"><span class="kicker">Réseau d'eau</span><b>La fuite d'eau potable est réparée</b></a>
+      <a class="reveal" href="/photos#video"><img src="/images/tiuccia-drone-poster.jpg" alt="" class="tilt3"><span class="kicker">Vu du ciel</span><b>Le survol de Tiuccia en drone</b></a>
+    </div>
+  </div></section>
+</Layout>

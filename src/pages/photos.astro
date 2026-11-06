@@ -1,0 +1,43 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+const travaux = ['portillon','img_1513jpg','img_1500jpg','img_1499jpg','img_1482jpg','img_1479jpg','carrelagecoteescalierjpg','img_1248jpg','rampes5jpg','alimportail','entreegravillons1jpg','murcomplet'];
+const ravalement = ['img_0323jpg','img_0320jpg','img_0316jpg','img_0314jpg','img_0310jpg','img_0307jpg','img_0286jpg','img_0281jpg','img_0311jpg','img_0315jpg'];
+const fuite = ['fuite1-1','fuite2','fuite3','fuite4'];
+const pics = (list: string[], alt: string) => list.map((n, i) => ({ src: `/images/${n}.jpg`, alt: `${alt} — photo ${i + 1}` }));
+---
+<Layout title="Photos de la résidence">
+  <PageHeader title="La résidence en images" kicker="Travaux & souvenirs" intro="Toutes les photos sont téléchargeables librement : cliquez dessus." image="/images/hero-photos.jpg" focus="42%" />
+  <section class="pad tight"><div class="wrap">
+    <nav aria-label="Sections" class="btns"><a class="btn ghost" href="#travaux">Travaux récents</a><a class="btn ghost" href="#ravalement">Ravalement</a><a class="btn ghost" href="#fuite">Réseau d'eau</a><a class="btn ghost" href="#video">Vidéo drone</a></nav>
+  </div></section>
+
+  <section class="pad tight" id="travaux"><div class="wrap">
+    <div class="kicker">Travaux récents</div>
+    <h2 class="t" style="font-size:30px">Portillon, rampes, carrelage, portail, gravillons, mur…</h2>
+    <div class="gal">{pics(travaux, 'Travaux récents').map(p => <a href={p.src} target="_blank" rel="noopener" download><img src={p.src} alt={p.alt} loading="lazy" /></a>)}</div>
+  </div></section>
+
+  <section class="pad" id="ravalement" style="background:var(--sand)"><div class="wrap">
+    <div class="kicker">Avant / pendant / après</div>
+    <h2 class="t" style="font-size:30px">Les travaux de ravalement</h2>
+    <div class="gal">{pics(ravalement, 'Ravalement').map(p => <a href={p.src} target="_blank" rel="noopener" download><img src={p.src} alt={p.alt} loading="lazy" /></a>)}</div>
+  </div></section>
+
+  <section class="pad tight" id="fuite"><div class="wrap">
+    <div class="kicker">Réseau d'eau potable</div>
+    <h2 class="t" style="font-size:30px">Dernière intervention sur la fuite</h2>
+    <div class="gal">{pics(fuite, 'Intervention fuite').map(p => <a href={p.src} target="_blank" rel="noopener" download><img src={p.src} alt={p.alt} loading="lazy" /></a>)}</div>
+  </div></section>
+
+  <svg class="curve" viewBox="0 0 1440 70" preserveAspectRatio="none" aria-hidden="true" style="background:var(--deep)"><path d="M0 70 C240 0 480 0 720 35 S1200 70 1440 10 V0 H0 Z" fill="#FFF8EC"/></svg>
+  <section class="band" id="video" style="min-height:auto"><div class="wrap">
+    <div style="flex:2 1 520px" class="video"><video controls preload="metadata" playsinline poster="/video/tiuccia-drone-poster.jpg" src="/video/tiuccia-drone.mp4" style="position:absolute;inset:0;width:100%;height:100%;background:#000">Votre navigateur ne lit pas cette vidéo — <a href="/video/tiuccia-drone.mp4" download>téléchargez-la</a>.</video></div>
+    <div class="txt" style="flex:1 1 280px">
+      <div class="kicker">Vu du ciel</div>
+      <h2 class="t">Tiuccia en drone</h2>
+      <p>La baie, le village et la résidence vus du ciel — 5 minutes de survol.</p>
+      <a class="btn sun" href="/video/tiuccia-drone.mp4" download="tiuccia-drone.mp4" style="align-self:flex-start">Télécharger la vidéo</a>
+    </div>
+  </div></section>
+</Layout>

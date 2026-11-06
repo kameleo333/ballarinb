@@ -1,0 +1,41 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+const archives = [
+  ['AG 2025', '12 juillet 2025', '/docs/archives/ag-2025.docx', 'Word'],
+  ['AG 2023', '5 août 2023', '/docs/archives/ag-2023.pdf', 'PDF'],
+  ['AG 2022', '4 août 2022', '/docs/archives/ag-2022.pdf', 'PDF'],
+  ['AG 2021', '4 août 2021', '/docs/archives/ag-2021.pdf', 'PDF'],
+  ['AG 2020', '6 août 2020', '/docs/archives/ag-2020.pdf', 'PDF'],
+  ['AG 2018', '30 juillet 2018', '/docs/archives/ag-2018.pdf', 'PDF'],
+];
+---
+<Layout title="Assemblées générales">
+  <PageHeader title="Assemblées générales" kicker="Les décisions de la copro" intro="Le compte rendu de la dernière assemblée, et les archives des années précédentes." image="/images/hero-assemblees.jpg" focus="64%" />
+  <section class="pad tight"><div class="wrap split">
+    <div style="flex:2 1 520px">
+      <div class="kicker">Dernière assemblée</div>
+      <h2 class="t" style="font-size:30px">Compte rendu des délibérations</h2>
+      <div class="btns" style="margin:0 0 18px"><a class="btn deep" href="/docs/ag-derniere.docx" download>Télécharger (Word)</a><button class="btn ghost" type="button" id="print">Imprimer</button></div>
+      <div class="doc-frame"><div class="docx" id="docx"><p style="color:var(--muted)">Chargement du document (quelques secondes)…</p></div></div>
+    </div>
+    <aside style="flex:1 1 280px">
+      <div class="box">
+        <h3>Archives</h3>
+        <ul class="list">
+          {archives.map(([t, d, href, type]) => <li><a href={href} download>{t}<small>{d} · {type}</small><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></svg></a></li>)}
+        </ul>
+      </div>
+      <div class="box note" style="margin-top:20px">
+        <h3>Le syndicat</h3>
+        <p style="margin:0;font-size:15px">Syndic bénévole : <b>JC. Bonugli</b><br>Syndic adjoint : <b>C. Dechen</b><br>12 lots d'habitation · Tiuccia</p>
+      </div>
+    </aside>
+  </div></section>
+  <script is:inline src="/js/mammoth.min.js"></script>
+  <script is:inline>
+    const box = document.getElementById('docx');
+    fetch('/docs/ag-derniere.docx').then(r => r.arrayBuffer()).then(ab => mammoth.convertToHtml({ arrayBuffer: ab })).then(r => { box.innerHTML = r.value; box.querySelectorAll('img').forEach(im => { im.title = 'Cliquer pour agrandir'; im.addEventListener('click', () => window.openLightbox(im.src, im.alt || 'Image du compte rendu')); }); }).catch(() => { box.innerHTML = '<p>Impossible d’afficher le document ici. <a href="/docs/ag-derniere.docx" download>Téléchargez-le</a> pour l’ouvrir dans Word.</p>'; });
+    document.getElementById('print').addEventListener('click', () => { const w = window.open('', '_blank'); if (!w) return; w.document.write('<html><head><title>Compte rendu</title></head><body style="font-family:Georgia,serif;padding:32px">' + box.innerHTML + '</body></html>'); w.document.close(); w.print(); });
+  </script>
+</Layout>

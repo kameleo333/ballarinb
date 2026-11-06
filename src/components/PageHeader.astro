@@ -1,0 +1,22 @@
+---
+interface Props { title: string; kicker?: string; intro?: string; image?: string; focus?: string }
+const { title, kicker, intro, image, focus = '50%' } = Astro.props;
+---
+<section class={`ph${image ? ' has-img' : ''}`}>
+  {image
+    ? <div class="ph-img" data-speed="0.35" style={`background-image:url('${image}');background-position:center ${focus}`} aria-hidden="true"></div>
+    : <div class="soleil" aria-hidden="true"></div>}
+  <div class="wrap">
+    <div class="crumb"><a href="/">Accueil</a> › {title}</div>
+    {kicker && <span class="kicker">{kicker}</span>}
+    <h1>{title}</h1>
+    {intro && <p>{intro}</p>}
+  </div>
+  {image && (
+    <div class="waves ph-waves" aria-hidden="true">
+      <svg class="w2" viewBox="0 0 2880 120" preserveAspectRatio="none"><path d="M0 70 C240 40 480 40 720 70 S1200 100 1440 70 S1920 40 2160 70 S2640 100 2880 70 V120 H0 Z" fill="#CFEAF8" opacity=".7"/></svg>
+      <svg class="w1" viewBox="0 0 2880 120" preserveAspectRatio="none"><path d="M0 60 C240 20 480 20 720 60 S1200 100 1440 60 S1920 20 2160 60 S2640 100 2880 60 V120 H0 Z" fill="#FFF8EC"/></svg>
+    </div>
+  )}
+</section>
+{!image && <svg class="curve" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true" style="background:var(--sea);margin-top:-1px"><path d="M0 60 C240 0 480 0 720 30 S1200 60 1440 10 V60 H0 Z" fill="#FFF8EC"/></svg>}

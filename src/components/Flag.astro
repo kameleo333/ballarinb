@@ -1,0 +1,8 @@
+---
+interface Props { small?: boolean }
+const { small = false } = Astro.props;
+---
+<div class={`flag${small ? ' small' : ''}`} role="img" aria-label="Drapeau corse">
+  <div class="pole"></div>
+  <canvas class="flagcv" width={small ? 384 : 560} height={small ? 240 : 352}></canvas>
+</div>

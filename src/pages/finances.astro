@@ -1,0 +1,43 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+---
+<Layout title="Finances et EDF">
+  <PageHeader title="Situation financière" kicker="Les comptes de la copro" intro="État financier après répartition, et suivi de la consommation électrique des parties communes." image="/images/hero-finances.jpg" focus="61%" />
+  <section class="pad tight"><div class="wrap">
+    <div class="kpis reveal">
+      <div class="kpi"><small>Trésorerie disponible</small><b>2 655,60 €</b><span>au 1er août 2026 · nouvel exercice</span></div>
+      <div class="kpi"><small>Exercice clos</small><b>2 574,76 €</b><span>trésorerie au 1er juillet 2026</span></div>
+      <div class="kpi"><small>Provisions pour travaux</small><b>5 520,00 €</b><span>dont avances internet</span></div>
+      <div class="kpi"><small>Restant à recevoir</small><b style="color:#1E6E45">0,00 €</b><span>aucune créance en cours</span></div>
+    </div>
+    <p style="font-size:13px;color:var(--muted);margin:10px 0 0">Chiffres extraits de l'état financier au 1er juillet 2026, présenté ci-dessous.</p>
+  </div></section>
+
+  <section class="pad tight"><div class="wrap">
+    <div class="kicker">Exercice 2025 – 2026</div>
+    <h2 class="t" style="font-size:30px">État financier après répartition au 1er juillet 2026</h2>
+    <p style="font-size:15px;color:var(--muted);margin:0 0 14px">Cliquez sur un tableau pour l'ouvrir en grand.</p>
+    <div class="docs3">
+      <a class="zoom" href="/images/financier-high.jpg"><img src="/images/financier-high.jpg" alt="État financier après répartition : trésorerie, provisions, créances et dettes"><span>État financier</span></a>
+      <a class="zoom" href="/images/gestion-de-taille-e-high.jpg"><img src="/images/gestion-de-taille-e-high.jpg" alt="Compte de gestion de l'exercice"><span>Compte de gestion</span></a>
+      <a class="zoom" href="/images/final-high-kym1g5.jpg"><img src="/images/final-high-kym1g5.jpg" alt="Répartition finale par copropriétaire"><span>Répartition</span></a>
+    </div>
+  </div></section>
+
+  <section class="pad" style="background:var(--sand)"><div class="wrap split">
+    <div style="flex:2 1 480px">
+      <div class="kicker">Parties communes</div>
+      <h2 class="t" style="font-size:30px">Consommation EDF</h2>
+      <a href="/images/graphique-edf-high-7jbu64.jpg" class="zoom"><img src="/images/graphique-edf-high-7jbu64.jpg" alt="Graphique de la consommation électrique par exercice" style="border-radius:16px;background:#fff;width:100%"></a>
+      <p style="font-size:13px;color:var(--muted);margin-top:10px"><a href="/images/bilan-edf-195549-27052026-high.jpg" class="zoom">Voir le relevé EDF du 27 mai 2026 →</a></p>
+    </div>
+    <aside class="box" style="flex:1 1 300px">
+      <h3>Comment lire le graphique</h3>
+      <p style="font-size:15px">Chaque année représentée prend en compte le second semestre de l'année précédente et le premier semestre de l'année en cours, car l'exercice comptable chevauche deux années civiles.</p>
+      <p style="font-size:15px"><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:#1F6FA8;vertical-align:middle;margin-right:8px"></span>Barres bleues : six derniers mois de l'année précédente</p>
+      <p style="font-size:15px"><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:#C8552B;vertical-align:middle;margin-right:8px"></span>Barres rouges : premier semestre de l'année en cours, jusqu'à la clôture des comptes</p>
+      <p style="font-size:15px;margin:0;color:var(--muted)">C'est pourquoi les totaux diffèrent du relevé EDF, qui couvre les deux semestres d'une même année civile.</p>
+    </aside>
+  </div></section>
+</Layout>
