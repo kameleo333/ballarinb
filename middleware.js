@@ -4,7 +4,7 @@ import { next } from '@vercel/edge';
 
 export const config = {
   // Tout sauf les assets de build et ce qui est nécessaire à la page de connexion
-  matcher: ['/((?!_astro/|favicon.svg|images/flag-corse.svg|images/cartepostale-1.jpg).*)'],
+  matcher: ['/((?!_astro/|favicon.svg|images/flag-corse.svg|images/connexion-bg.jpg).*)'],
 };
 
 const COOKIE = 'bb_session';
