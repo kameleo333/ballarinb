@@ -53,5 +53,5 @@ Les chiffres clés de la page Finances (trésorerie, provisions) sont écrits da
 
 ## À compléter
 
-- `src/pages/infos.astro` : remplacer `ADRESSE@EXEMPLE.FR` par l'e-mail du syndic.
+- `src/pages/infos.astro` : remplacer `syndicjcb@ballarinb-tiuccia.fr` par l'e-mail du syndic.
 - Vidéo drone : Vimeo 238441516 (mot de passe `ballarindrone`, affiché sur la page Photos).
