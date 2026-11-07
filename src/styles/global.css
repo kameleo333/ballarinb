@@ -207,3 +207,7 @@ nav.main a.out:hover{background:var(--peach);color:var(--terra)}
 footer.site .ft{display:flex;flex-direction:column;gap:2px;line-height:1.35}
 footer.site .ft span{white-space:nowrap}
 @media(max-width:720px){footer.site .wrap{flex-direction:column;align-items:flex-start}footer.site .wrap>div:last-child{text-align:left!important}}
+
+/* fond photo de la page de connexion */
+.login-bg{position:absolute;inset:0;background:url("/images/connexion-bg.jpg") center 45%/cover no-repeat;opacity:.55}
+.login-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(127,200,238,.55) 0%,rgba(42,157,214,.25) 45%,rgba(11,92,142,.75) 100%)}
