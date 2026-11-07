@@ -4,7 +4,6 @@ import Flag from '../components/Flag.astro';
 ---
 <Layout title="Connexion" nav={false}>
   <section class="hero short" style="min-height:100svh;align-items:center">
-    <div class="layer" data-speed="0.15"><div class="soleil"></div></div>
     <div class="login-bg" aria-hidden="true"></div>
     <div class="wrap" style="position:relative;z-index:3;display:flex;flex-wrap:wrap;gap:40px;align-items:center;justify-content:space-between;padding-top:40px;padding-bottom:60px">
       <div class="hero-copy" style="padding:0;max-width:520px">
@@ -12,7 +11,7 @@ import Flag from '../components/Flag.astro';
         <h1 style="font-size:clamp(34px,5.5vw,56px)">Résidence <em>Ballarin&nbsp;B</em></h1>
         <p>Espace réservé aux copropriétaires. Saisissez le mot de passe communiqué par le syndic.</p>
       </div>
-      <form method="post" action="/api/login" class="box" style="flex:1 1 320px;max-width:420px;background:rgba(255,248,236,.96);box-shadow:0 24px 60px rgba(0,0,0,.3);border-color:transparent">
+      <form method="post" action="/api/login" class="box" style="flex:1 1 320px;max-width:420px;color:var(--ink);background:rgba(255,248,236,.96);box-shadow:0 24px 60px rgba(0,0,0,.3);border-color:transparent">
         <h2 class="serif" style="font-size:26px;margin:0 0 16px">Connexion</h2>
         <div id="err" hidden style="margin-bottom:14px;padding:10px 14px;border-radius:12px;background:#FDE2D6;color:#8A2E0C;font-weight:700;font-size:14px">Mot de passe incorrect, réessayez.</div>
         <div class="field"><label for="pwd">Mot de passe</label><input id="pwd" name="password" type="password" autocomplete="current-password" required autofocus></div>
