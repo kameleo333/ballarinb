@@ -1,9 +1,11 @@
 ---
-interface Props { title: string; kicker?: string; intro?: string; image?: string; focus?: string }
-const { title, kicker, intro, image, focus = '50%' } = Astro.props;
+interface Props { title: string; kicker?: string; intro?: string; image?: string; focus?: string; video?: string }
+const { title, kicker, intro, image, focus = '50%', video } = Astro.props;
 ---
 <section class={`ph${image ? ' has-img' : ''}`}>
-  {image
+  {video
+    ? <div class="ph-img" data-speed="0.35" aria-hidden="true"><video class="ph-video" autoplay muted loop playsinline preload="auto" poster={image} src={video} style={`object-position:center ${focus}`}></video></div>
+    : image
     ? <div class="ph-img" data-speed="0.35" style={`background-image:url('${image}');background-position:center ${focus}`} aria-hidden="true"></div>
     : <div class="soleil" aria-hidden="true"></div>}
   <div class="wrap">

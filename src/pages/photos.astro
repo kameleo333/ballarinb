@@ -7,7 +7,7 @@ const fuite = ['fuite1-1','fuite2','fuite3','fuite4'];
 const pics = (list: string[], alt: string) => list.map((n, i) => ({ src: `/images/${n}.jpg`, alt: `${alt} — photo ${i + 1}` }));
 ---
 <Layout title="Photos de la résidence">
-  <PageHeader title="La résidence en images" kicker="Travaux & souvenirs" intro="Toutes les photos sont téléchargeables librement : cliquez dessus." image="/images/hero-photos.jpg" focus="42%" />
+  <PageHeader title="La résidence en images" kicker="Travaux & souvenirs" intro="Toutes les photos sont téléchargeables librement : cliquez dessus." image="/video/hero-photos-poster.jpg" video="/video/hero-photos.mp4" focus="50%" />
   <section class="pad tight"><div class="wrap">
     <nav aria-label="Sections" class="btns"><a class="btn ghost" href="#travaux">Travaux récents</a><a class="btn ghost" href="#ravalement">Ravalement</a><a class="btn ghost" href="#fuite">Réseau d'eau</a><a class="btn ghost" href="#video">Vidéo drone</a></nav>
   </div></section>

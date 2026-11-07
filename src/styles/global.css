@@ -211,3 +211,6 @@ footer.site .ft span{white-space:nowrap}
 /* fond photo de la page de connexion */
 .login-bg{position:absolute;inset:0;background:url("/images/connexion-bg.jpg") center 45%/cover no-repeat;opacity:.55}
 .login-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(127,200,238,.55) 0%,rgba(42,157,214,.25) 45%,rgba(11,92,142,.75) 100%)}
+
+.ph-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+@media (prefers-reduced-motion: reduce){.ph-video{display:none}}
