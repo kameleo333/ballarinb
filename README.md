@@ -27,14 +27,15 @@ Tout ce qui change régulièrement est dans le dossier **`public/docs/`**, avec 
 
 | Fichier | Contenu | Quand le remplacer |
 |---|---|---|
-| `public/docs/paiements.jpg` | Tableau des règlements de charges (image) | Chaque mois |
+| `public/docs/paiements.xlsx` | Tableau des règlements de charges (fichier Excel, 1er onglet) — affiché comme un vrai tableau sur le site | Chaque mois |
+| `public/docs/paiements.jpg` | Ancienne version image, utilisée seulement si le .xlsx est absent | — |
 | `public/docs/ag-derniere.docx` | Compte rendu de la dernière AG (Word) | Après chaque AG |
 | `public/docs/archives/ag-AAAA.pdf` ou `.docx` | Anciens comptes rendus | Après chaque AG : y déplacer l'ancien "dernier" |
 | `public/docs/carnet-entretien.pdf` | Carnet d'entretien | Rarement |
 
 **Procédure sur GitHub (dans le navigateur, sans rien installer) :**
 1. Ouvrir le dépôt → dossier `public/docs`.
-2. Bouton **Add file → Upload files**, glisser le nouveau fichier **avec exactement le même nom** (`paiements.jpg` ou `ag-derniere.docx`). Il remplace l'ancien.
+2. Bouton **Add file → Upload files**, glisser le nouveau fichier **avec exactement le même nom** (`paiements.xlsx` ou `ag-derniere.docx`). Il remplace l'ancien.
 3. Bouton vert **Commit changes**. Vercel republie le site tout seul ; la date "Dernière mise à jour" se met à jour automatiquement.
 
 Pour ajouter une archive : déposer `ag-2026.docx` (ou `.pdf`) dans `public/docs/archives/` puis ajouter une ligne dans la liste `archives` en haut de `src/pages/assemblees.astro` (c'est la seule retouche "texte" nécessaire).

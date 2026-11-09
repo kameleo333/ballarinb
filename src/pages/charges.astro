@@ -6,9 +6,16 @@ import PageHeader from '../components/PageHeader.astro';
   <PageHeader title="Vos règlements de charges" kicker="Où en est-on ?" intro="Situation des appels de charges et des règlements reçus, copropriétaire par copropriétaire." image="/images/hero-charges.jpg" focus="47%" />
   <section class="pad tight"><div class="wrap split">
     <div style="flex:2 1 520px">
-      <div class="btns" style="margin:0 0 18px"><a class="btn deep zoom" href="/docs/paiements.jpg">Agrandir</a><a class="btn ghost" href="/docs/paiements.jpg" download="paiements-ballarin-b.jpg">Télécharger</a></div>
-      <div class="doc-frame" style="max-width:640px"><img src="/docs/paiements.jpg" alt="Tableau des recettes : montants appelés et réglés par copropriétaire"></div>
-      <p style="font-size:13px;color:var(--muted);margin-top:10px">Document établi par le trésorier du syndicat. Montants en euros.</p>
+      <div id="xls-wrap" hidden>
+        <div class="btns" style="margin:0 0 18px"><a class="btn deep" href="/docs/paiements.xlsx" download="paiements-ballarin-b.xlsx">Télécharger (Excel)</a></div>
+        <div class="sheet-wrap"><div id="xls"></div></div>
+        <p style="font-size:13px;color:var(--muted);margin-top:10px">Tableau établi par le trésorier du syndicat. Montants en euros. Sur mobile, faites glisser horizontalement.</p>
+      </div>
+      <div id="img-wrap">
+        <div class="btns" style="margin:0 0 18px"><a class="btn deep zoom" href="/docs/paiements.jpg">Agrandir</a><a class="btn ghost" href="/docs/paiements.jpg" download="paiements-ballarin-b.jpg">Télécharger</a></div>
+        <div class="doc-frame" style="max-width:640px"><img src="/docs/paiements.jpg" alt="Tableau des recettes : montants appelés et réglés par copropriétaire"></div>
+        <p style="font-size:13px;color:var(--muted);margin-top:10px">Document établi par le trésorier du syndicat. Montants en euros.</p>
+      </div>
     </div>
     <aside style="flex:1 1 280px">
       <div class="box">
@@ -24,4 +31,37 @@ import PageHeader from '../components/PageHeader.astro';
       </div>
     </aside>
   </div></section>
+  <script is:inline src="/js/xlsx.min.js"></script>
+  <script is:inline>
+  (async()=>{
+    try{
+      const r=await fetch('/docs/paiements.xlsx',{cache:'no-store'});
+      if(!r.ok) return;
+      const buf=await r.arrayBuffer(); const sig=new Uint8Array(buf.slice(0,2));
+      if(!(sig[0]===0x50&&sig[1]===0x4B)) return; // pas un fichier Excel (xlsx = zip "PK")
+      const wb=XLSX.read(buf,{type:'array',cellDates:true});
+      const ws=wb.Sheets[wb.SheetNames[0]];
+      const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:'',raw:false});
+      // retire lignes et colonnes entièrement vides
+      const keep=rows.filter(rw=>rw.some(c=>String(c).trim()!==''));
+      const ncol=Math.max(...keep.map(rw=>rw.length));
+      const cols=[...Array(ncol).keys()].filter(i=>keep.some(rw=>String(rw[i]??'').trim()!==''));
+      const isNum=v=>/^-?\s*[\d\s.,]+\s*€?$/.test(String(v).trim())&&/\d/.test(v);
+      const fmt=v=>{const s=String(v).trim();if(!isNum(s))return s;const n=parseFloat(s.replace(/[^\d,.-]/g,'').replace(/\s/g,'').replace(',','.'));return isNaN(n)?s:n.toLocaleString('fr-FR',{minimumFractionDigits:n%1?2:0,maximumFractionDigits:2})+' €'};
+      // 1re ligne non vide avec >=2 cellules = en-tête ; les lignes au-dessus = titre
+      let h=keep.findIndex(rw=>cols.filter(i=>String(rw[i]??'').trim()!=='').length>=2);
+      const title=keep.slice(0,h).map(rw=>rw.find(c=>String(c).trim()!=='')).filter(Boolean).join(' · ');
+      let html=title?'<caption>'+title+'</caption>':'';
+      html+='<thead><tr>'+cols.map(i=>'<th>'+(keep[h][i]??'')+'</th>').join('')+'</tr></thead><tbody>';
+      for(const rw of keep.slice(h+1)){
+        const first=String(rw[cols[0]]??'').trim();
+        const total=/perçu|percu|prévu|prevu|total|dépenses|depenses|avance|recettes|avoir|intér/i.test(first);
+        html+='<tr'+(total?' class="tot"':'')+'>'+cols.map((i,k)=>{const v=rw[i]??'';return '<td'+(k>0&&isNum(v)?' class="num"':'')+'>'+fmt(v)+'</td>'}).join('')+'</tr>';
+      }
+      html+='</tbody>';
+      document.getElementById('xls').innerHTML='<table class="sheet">'+html+'</table>';
+      document.getElementById('xls-wrap').hidden=false;document.getElementById('img-wrap').hidden=true;
+    }catch(e){console.warn('xlsx',e)}
+  })();
+  </script>
 </Layout>
