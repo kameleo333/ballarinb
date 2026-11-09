@@ -17,6 +17,7 @@ const maj = new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'lon
       <h1>Bienvenue à la résidence <em>Ballarin&nbsp;B</em></h1>
       <p>Le petit site de notre copropriété à Tiuccia : les comptes rendus d'AG, vos règlements, les photos des travaux… et la mer en fond d'écran.</p>
       <div class="btns"><a class="btn sun" href="/charges">Mes règlements de charges</a><a class="btn ghost light" href="/assemblees">Compte rendu AG 2026</a></div>
+      <div id="fetes" hidden style="margin-top:14px;padding:14px 18px;border-radius:18px;background:rgba(255,248,236,.94);box-shadow:0 12px 30px rgba(0,0,0,.2);max-width:560px;text-align:center"><img src="/images/joyeux-noel.gif" alt="Joyeux Noël et bonnes fêtes — Bon Natale, pace è salute" style="width:100%;max-width:520px;height:auto;display:inline-block"><div style="font-size:14px;color:var(--muted);margin-top:6px;font-weight:700">Le syndic vous souhaite de belles fêtes</div></div>
       <div class="maj"><span class="dot"></span><div><b>Dernière mise à jour : {maj}</b><br><span>Paiements de charges et compte rendu de la dernière assemblée en ligne</span></div></div>
     </div>
   </section>
@@ -57,4 +58,8 @@ const maj = new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'lon
       <a class="reveal" href="/photos#video"><img src="/images/tiuccia-drone-poster.jpg" alt="" class="tilt3"><span class="kicker">Vu du ciel</span><b>Le survol de Tiuccia en drone</b></a>
     </div>
   </div></section>
+  <script is:inline>
+    // Vœux affichés du 20 décembre au 20 janvier (date du visiteur)
+    (function(){const d=new Date(),m=d.getMonth()+1,j=d.getDate();if((m===12&&j>=20)||(m===1&&j<=20)){document.getElementById('fetes').hidden=false;}})();
+  </script>
 </Layout>
