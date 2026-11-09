@@ -1,15 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PageHeader from '../components/PageHeader.astro';
-const archives = [
-  ['AG 2025', '12 juillet 2025', '/docs/archives/ag-2025.docx', 'Word'],
-  ['AG 2024', '26 juillet 2024', '/docs/archives/ag-2024.pdf', 'PDF'],
-  ['AG 2023', '5 août 2023', '/docs/archives/ag-2023.pdf', 'PDF'],
-  ['AG 2022', '4 août 2022', '/docs/archives/ag-2022.pdf', 'PDF'],
-  ['AG 2021', '4 août 2021', '/docs/archives/ag-2021.pdf', 'PDF'],
-  ['AG 2020', '6 août 2020', '/docs/archives/ag-2020.pdf', 'PDF'],
-  ['AG 2018', '30 juillet 2018', '/docs/archives/ag-2018.pdf', 'PDF'],
-];
+import { readdirSync } from 'node:fs';
+const dates: Record<string,string> = { '2025':'12 juillet 2025','2024':'26 juillet 2024','2023':'5 août 2023','2022':'4 août 2022','2021':'4 août 2021','2020':'6 août 2020','2018':'30 juillet 2018' };
+const archives = readdirSync('public/docs/archives')
+  .map(f => { const m = f.match(/^ag-(\d{4})\.(pdf|docx)$/i); return m ? { year: m[1], ext: m[2].toLowerCase(), file: f } : null; })
+  .filter((x): x is {year:string;ext:string;file:string} => !!x)
+  .sort((a, b) => b.year.localeCompare(a.year))
+  .map(a => [`AG ${a.year}`, dates[a.year] || `Assemblée ${a.year}`, `/docs/archives/${a.file}`, a.ext === 'pdf' ? 'PDF' : 'Word']);
 ---
 <Layout title="Assemblées générales">
   <PageHeader title="Assemblées générales" kicker="Les décisions de la copro" intro="Le compte rendu de la dernière assemblée, et les archives des années précédentes." image="/images/hero-assemblees.jpg" focus="64%" />

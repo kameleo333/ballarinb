@@ -231,3 +231,8 @@ table.sheet td.num{text-align:right;font-variant-numeric:tabular-nums}
 table.sheet tbody tr:nth-child(even){background:#FFFCF5}
 table.sheet tbody tr:hover{background:var(--sand)}
 table.sheet tr.tot td{background:var(--sand);font-weight:800;color:var(--deep);border-top:2px solid var(--sun)}
+
+label.radio{display:flex;gap:10px;align-items:flex-start;font-weight:600;font-size:15px;padding:10px 12px;border:2px solid var(--lightblue);border-radius:12px;cursor:pointer}
+label.radio:has(input:checked){border-color:var(--sun);background:var(--sand)}
+label.radio input{width:18px;height:18px;min-height:0;margin:3px 0 0;flex:none}
+label.radio code{font-size:13px;background:#fff;padding:1px 6px;border-radius:6px}

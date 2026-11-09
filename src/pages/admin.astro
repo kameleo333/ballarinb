@@ -1,0 +1,90 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+---
+<Layout title="Administration" description="Mise à jour des documents du site">
+  <PageHeader title="Mise à jour du site" kicker="Espace syndic" intro="Déposez ici le nouveau tableau des charges ou le dernier compte rendu d'AG. Le site se met à jour tout seul en une minute." />
+
+  <section class="pad tight"><div class="wrap split">
+    <form id="up" class="box" style="flex:2 1 520px;display:flex;flex-direction:column;gap:18px">
+      <div class="field" style="margin:0">
+        <label for="pwd">Mot de passe administrateur</label>
+        <input id="pwd" type="password" autocomplete="current-password" required>
+      </div>
+
+      <fieldset style="border:0;padding:0;margin:0;display:flex;flex-direction:column;gap:10px">
+        <legend style="font-weight:800;font-size:14px;margin-bottom:6px">Que voulez-vous mettre à jour ?</legend>
+        <label class="radio"><input type="radio" name="target" value="paiements" checked> <span><b>Tableau des charges</b> — fichier Excel <code>.xlsx</code> (bloc Recettes uniquement, jamais le classeur complet)</span></label>
+        <label class="radio"><input type="radio" name="target" value="ag"> <span><b>Nouveau compte rendu d'AG</b> — fichier Word <code>.docx</code></span></label>
+        <label class="radio"><input type="radio" name="target" value="archive"> <span><b>Ajouter / corriger une archive d'AG</b> — <code>.pdf</code> ou <code>.docx</code></span></label>
+        <label class="radio"><input type="radio" name="target" value="carnet"> <span><b>Carnet d'entretien</b> — <code>.pdf</code></span></label>
+      </fieldset>
+
+      <div id="year-wrap" class="field" style="margin:0" hidden>
+        <label for="year" id="year-label">Année de l'AG</label>
+        <input id="year" type="text" inputmode="numeric" pattern="\d{4}" placeholder="2025" style="max-width:160px">
+        <p id="year-help" style="margin:6px 0 0;font-size:13px;color:var(--muted)"></p>
+      </div>
+
+      <div class="field" style="margin:0">
+        <label for="file">Fichier</label>
+        <input id="file" type="file" required style="padding:10px">
+        <p style="margin:6px 0 0;font-size:13px;color:var(--muted)">4 Mo maximum. Le nom du fichier n'a pas d'importance : il est renommé automatiquement.</p>
+      </div>
+
+      <div class="field" style="margin:0">
+        <label for="note">Commentaire (facultatif)</label>
+        <input id="note" type="text" maxlength="120" placeholder="ex. règlements de décembre">
+      </div>
+
+      <button class="btn sun" type="submit" id="send" style="align-self:flex-start">Envoyer sur le site</button>
+      <div id="msg" hidden style="padding:14px 16px;border-radius:12px;font-weight:700"></div>
+    </form>
+
+    <aside style="flex:1 1 280px;display:flex;flex-direction:column;gap:20px">
+      <div class="box note">
+        <h3>Comment ça marche</h3>
+        <ol style="margin:0;padding-left:18px;font-size:15px;line-height:1.6">
+          <li>Choisissez le type de document.</li>
+          <li>Sélectionnez le fichier sur votre ordinateur.</li>
+          <li>Cliquez sur <b>Envoyer</b>.</li>
+          <li>Attendez ~1 minute, puis rechargez la page concernée.</li>
+        </ol>
+        <p style="margin:12px 0 0;font-size:14px">En cas d'erreur, renvoyez simplement le bon fichier : il remplace le précédent. Toutes les versions sont conservées.</p>
+      </div>
+      <div class="box">
+        <h3>Documents actuels</h3>
+        <ul class="list">
+          <li><a href="/docs/paiements.xlsx" download>Tableau des charges<small>paiements.xlsx</small></a></li>
+          <li><a href="/docs/ag-derniere.docx" download>Dernier compte rendu d'AG<small>ag-derniere.docx</small></a></li>
+          <li><a href="/docs/carnet-entretien.pdf" target="_blank" rel="noopener">Carnet d'entretien<small>carnet-entretien.pdf</small></a></li>
+        </ul>
+      </div>
+    </aside>
+  </div></section>
+
+  <script is:inline>
+    const form=document.getElementById('up'), msg=document.getElementById('msg'), yearWrap=document.getElementById('year-wrap'), yearLabel=document.getElementById('year-label'), yearHelp=document.getElementById('year-help'), fileIn=document.getElementById('file'), send=document.getElementById('send');
+    const accept={paiements:'.xlsx',ag:'.docx',archive:'.pdf,.docx',carnet:'.pdf'};
+    function sync(){
+      const t=form.target.value; fileIn.accept=accept[t];
+      yearWrap.hidden=!(t==='ag'||t==='archive');
+      if(t==='ag'){yearLabel.textContent="Année de l'ancien compte rendu (pour l'archiver)";yearHelp.textContent="Facultatif. Si vous l'indiquez, le compte rendu actuellement en ligne est d'abord copié dans les archives sous cette année.";}
+      if(t==='archive'){yearLabel.textContent="Année de l'AG";yearHelp.textContent="Obligatoire. Remplace l'archive existante de cette année s'il y en a une.";}
+    }
+    form.querySelectorAll('input[name=target]').forEach(r=>r.addEventListener('change',sync)); sync();
+    function show(text,ok){msg.hidden=false;msg.textContent=text;msg.style.background=ok?'#E6F4EC':'#FDE2D6';msg.style.color=ok?'#1E6E45':'#8A2E0C';}
+    form.addEventListener('submit',async e=>{
+      e.preventDefault(); const f=fileIn.files[0]; if(!f) return;
+      if(f.size>4*1024*1024){show('Fichier trop volumineux (4 Mo maximum).',false);return;}
+      send.disabled=true; send.textContent='Envoi en cours…'; msg.hidden=true;
+      try{
+        const r=await fetch('/api/upload',{method:'POST',headers:{'Content-Type':'application/octet-stream','X-Admin-Password':document.getElementById('pwd').value,'X-Target':form.target.value,'X-Filename':encodeURIComponent(f.name),'X-Year':document.getElementById('year').value.trim(),'X-Note':encodeURIComponent(document.getElementById('note').value.trim())},body:f});
+        const j=await r.json().catch(()=>({}));
+        if(r.ok&&j.ok){show('✓ '+j.message,true); fileIn.value='';}
+        else show(j.error||('Erreur '+r.status),false);
+      }catch(err){show('Erreur réseau : '+err,false);}
+      send.disabled=false; send.textContent='Envoyer sur le site';
+    });
+  </script>
+</Layout>

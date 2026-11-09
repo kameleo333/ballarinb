@@ -23,6 +23,13 @@ Le mot de passe est vérifié par `middleware.js` (Vercel Edge Middleware). Une 
 
 ## Mise à jour du contenu — mode d'emploi pour le syndic (aucune ligne de code)
 
+### Méthode simple : la page `/admin` (recommandée)
+Se connecter au site, ouvrir `/admin` (lien « Espace syndic » en bas de page), saisir le mot de passe administrateur, choisir le type de document, sélectionner le fichier, Envoyer. Le fichier est enregistré dans le dépôt GitHub par la fonction `api/upload.js` et Vercel republie le site (~1 min). Les archives d'AG (`public/docs/archives/ag-AAAA.pdf|docx`) apparaissent automatiquement dans la liste.
+
+Variables Vercel nécessaires en plus : `ADMIN_PASSWORD` (mot de passe de la page admin) et `GITHUB_TOKEN` (token GitHub *fine-grained*, dépôt `ballarinb` uniquement, permission **Contents : Read and write**, à renouveler avant expiration).
+
+### Méthode manuelle (GitHub)
+
 Tout ce qui change régulièrement est dans le dossier **`public/docs/`**, avec des noms de fichiers **fixes** :
 
 | Fichier | Contenu | Quand le remplacer |
