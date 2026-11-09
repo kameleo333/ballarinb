@@ -63,10 +63,11 @@ const archives = readdirSync('public/docs/archives').filter(f => /^ag-\d{4}\.(pd
       </div>
       <div class="box">
         <h3>Documents actuels</h3>
+        <p style="font-size:14px;color:var(--muted);margin:0 0 8px">Envoi fait par erreur ? « Annuler » remet la version d'avant le dernier envoi.</p>
         <ul class="list">
-          <li><a href="/docs/paiements.xlsx" download>Tableau des charges<small>paiements.xlsx</small></a></li>
-          <li><a href="/docs/ag-derniere.docx" download>Dernier compte rendu d'AG<small>ag-derniere.docx</small></a></li>
-          <li><a href="/docs/carnet-entretien.pdf" target="_blank" rel="noopener">Carnet d'entretien<small>carnet-entretien.pdf</small></a></li>
+          <li style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 6px"><a href="/docs/paiements.xlsx" download style="padding:0;min-height:0">Tableau des charges<small>paiements.xlsx</small></a><button type="button" class="btn ghost undo" data-target="paiements" data-label="Tableau des charges" style="min-height:36px;padding:0 12px;font-size:13px">Annuler</button></li>
+          <li style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 6px"><a href="/docs/ag-derniere.docx" download style="padding:0;min-height:0">Dernier compte rendu d'AG<small>ag-derniere.docx</small></a><button type="button" class="btn ghost undo" data-target="ag" data-label="Dernier compte rendu d'AG" style="min-height:36px;padding:0 12px;font-size:13px">Annuler</button></li>
+          <li style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 6px"><a href="/docs/carnet-entretien.pdf" target="_blank" rel="noopener" style="padding:0;min-height:0">Carnet d'entretien<small>carnet-entretien.pdf</small></a><button type="button" class="btn ghost undo" data-target="carnet" data-label="Carnet d'entretien" style="min-height:36px;padding:0 12px;font-size:13px">Annuler</button></li>
         </ul>
       </div>
     </aside>
@@ -82,6 +83,18 @@ const archives = readdirSync('public/docs/archives').filter(f => /^ag-\d{4}\.(pd
         if(r.ok&&j.ok){b.closest('li').remove(); const m=document.getElementById('msg'); m.hidden=false; m.textContent='✓ '+j.message; m.style.background='#E6F4EC'; m.style.color='#1E6E45';}
         else{alert(j.error||('Erreur '+r.status)); b.disabled=false; b.textContent='Supprimer';}
       }catch(e){alert('Erreur réseau : '+e); b.disabled=false; b.textContent='Supprimer';}
+    }));
+    document.querySelectorAll('button.undo').forEach(b=>b.addEventListener('click',async()=>{
+      const pwd=document.getElementById('pwd').value;
+      if(!pwd){alert('Saisissez d’abord le mot de passe administrateur (en haut du formulaire).');return;}
+      if(!confirm('Remettre la version précédente de « '+b.dataset.label+' » ? Le dernier envoi sera annulé.')) return;
+      b.disabled=true; b.textContent='…';
+      try{const r=await fetch('/api/upload',{method:'POST',headers:{'X-Action':'restore','X-Target':b.dataset.target,'X-Admin-Password':pwd}});const j=await r.json().catch(()=>({}));
+        const m=document.getElementById('msg'); m.hidden=false;
+        if(r.ok&&j.ok){m.textContent='✓ '+j.message; m.style.background='#E6F4EC'; m.style.color='#1E6E45';}
+        else{m.textContent=j.error||('Erreur '+r.status); m.style.background='#FDE2D6'; m.style.color='#8A2E0C';}
+      }catch(e){alert('Erreur réseau : '+e);}
+      b.disabled=false; b.textContent='Annuler';
     }));
     const form=document.getElementById('up'), msg=document.getElementById('msg'), yearWrap=document.getElementById('year-wrap'), yearLabel=document.getElementById('year-label'), yearHelp=document.getElementById('year-help'), fileIn=document.getElementById('file'), send=document.getElementById('send');
     const accept={paiements:'.xlsx',ag:'.docx',archive:'.pdf,.docx',carnet:'.pdf'};

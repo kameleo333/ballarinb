@@ -73,6 +73,24 @@ export default async function handler(req, res) {
     } catch (e) { return res.status(502).json({ error: String(e.message || e) }); }
   }
 
+  // Retour à la version précédente d'un document principal
+  if (String(req.headers['x-action'] || '') === 'restore') {
+    const tg = TARGETS[String(req.headers['x-target'] || '')];
+    if (!tg || !tg.path) return res.status(400).json({ error: 'Document inconnu.' });
+    try {
+      const cr = await fetch(`https://api.github.com/repos/${REPO}/commits?path=${encodeURIComponent(tg.path)}&sha=${BRANCH}&per_page=1`, { headers: { Authorization: `Bearer ${process.env.GITHUB_TOKEN}`, Accept: 'application/vnd.github+json', 'User-Agent': 'ballarinb-admin' } });
+      const commits = await cr.json();
+      const last = Array.isArray(commits) && commits[0];
+      const parent = last && last.parents && last.parents[0] && last.parents[0].sha;
+      if (!parent) return res.status(404).json({ error: 'Aucune version précédente trouvée.' });
+      const prev = await gh('GET', `${tg.path}?ref=${parent}`);
+      if (!prev.ok || !prev.json.content) return res.status(404).json({ error: 'Version précédente introuvable.' });
+      const when = last.commit && last.commit.committer && last.commit.committer.date ? new Date(last.commit.committer.date).toLocaleString('fr-FR') : '';
+      await putFile(tg.path, prev.json.content.replace(/\n/g, ''), `Admin : retour à la version précédente — ${tg.label} (annule la mise à jour du ${when})`);
+      return res.status(200).json({ ok: true, message: `Version précédente de « ${tg.label} » restaurée. Le site se met à jour dans environ une minute.` });
+    } catch (e) { return res.status(502).json({ error: String(e.message || e) }); }
+  }
+
   const target = String(req.headers['x-target'] || '');
   const filename = decodeURIComponent(String(req.headers['x-filename'] || 'fichier'));
   const year = String(req.headers['x-year'] || '').trim();
