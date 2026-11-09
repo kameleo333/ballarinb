@@ -9,7 +9,7 @@ import PageHeader from '../components/PageHeader.astro';
       <div class="kpi"><small>Trésorerie disponible</small><b>2 655,60 €</b><span>au 1er août 2026 · nouvel exercice</span></div>
       <div class="kpi"><small>Exercice clos</small><b>2 574,76 €</b><span>trésorerie au 1er juillet 2026</span></div>
       <div class="kpi"><small>Report de l'exercice précédent</small><b>2 374,76 €</b><span>reste à la clôture au 1er juillet 2026 (avance / provision)</span></div>
-      <div class="kpi"><small>Restant à recevoir</small><b style="color:#1E6E45">0,00 €</b><span>aucune créance en cours</span></div>
+      <div class="kpi"><small>Reste à payer (charges)</small><b id="reste" style="color:#B5451B">1 140 €</b><span id="reste-sub">prévu 4 560 € − perçu 3 420 €</span></div>
     </div>
     <p style="font-size:13px;color:var(--muted);margin:10px 0 0">Chiffres extraits de l'état financier au 1er juillet 2026, présenté ci-dessous.</p>
   </div></section>
@@ -40,4 +40,21 @@ import PageHeader from '../components/PageHeader.astro';
       <p style="font-size:15px;margin:0;color:var(--muted)">C'est pourquoi les totaux diffèrent du relevé EDF, qui couvre les deux semestres d'une même année civile.</p>
     </aside>
   </div></section>
+  <script is:inline src="/js/xlsx.min.js"></script>
+  <script is:inline>
+  (async()=>{
+    try{
+      const r=await fetch('/docs/paiements.xlsx',{cache:'no-store'}); if(!r.ok) return;
+      const buf=await r.arrayBuffer(); const sig=new Uint8Array(buf.slice(0,2)); if(!(sig[0]===0x50&&sig[1]===0x4B)) return;
+      const wb=XLSX.read(buf,{type:'array'}); const rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:'',raw:true});
+      const find=re=>{const rw=rows.find(x=>re.test(String(x[0]||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'')));return rw?rw.find((v,i)=>i>0&&typeof v==='number'):null};
+      const percu=find(/^\s*percu/i), prevu=find(/^\s*prevu/i);
+      if(typeof percu!=='number'||typeof prevu!=='number') return;
+      const f=n=>n.toLocaleString('fr-FR',{minimumFractionDigits:Number.isInteger(n)?0:2,maximumFractionDigits:2})+' €';
+      const reste=Math.max(0,prevu-percu);
+      const b=document.getElementById('reste'); b.textContent=f(reste); b.style.color=reste>0?'#B5451B':'#1E6E45';
+      document.getElementById('reste-sub').textContent='prévu '+f(prevu)+' − perçu '+f(percu);
+    }catch(e){console.warn(e)}
+  })();
+  </script>
 </Layout>
