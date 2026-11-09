@@ -41,13 +41,13 @@ import PageHeader from '../components/PageHeader.astro';
       if(!(sig[0]===0x50&&sig[1]===0x4B)) return; // pas un fichier Excel (xlsx = zip "PK")
       const wb=XLSX.read(buf,{type:'array',cellDates:true});
       const ws=wb.Sheets[wb.SheetNames[0]];
-      const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:'',raw:false});
+      const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:'',raw:true});
       // retire lignes et colonnes entièrement vides
       const keep=rows.filter(rw=>rw.some(c=>String(c).trim()!==''));
       const ncol=Math.max(...keep.map(rw=>rw.length));
       const cols=[...Array(ncol).keys()].filter(i=>keep.some(rw=>String(rw[i]??'').trim()!==''));
-      const isNum=v=>/^-?\s*[\d\s.,]+\s*€?$/.test(String(v).trim())&&/\d/.test(v);
-      const fmt=v=>{const s=String(v).trim();if(!isNum(s))return s;const n=parseFloat(s.replace(/[^\d,.-]/g,'').replace(/\s/g,'').replace(',','.'));return isNaN(n)?s:n.toLocaleString('fr-FR',{minimumFractionDigits:n%1?2:0,maximumFractionDigits:2})+' €'};
+      const isNum=v=>typeof v==='number';
+      const fmt=v=>{if(v instanceof Date)return v.toLocaleDateString('fr-FR');if(typeof v!=='number')return String(v);return v.toLocaleString('fr-FR',{minimumFractionDigits:Number.isInteger(v)?0:2,maximumFractionDigits:2})+' €'};
       // 1re ligne non vide avec >=2 cellules = en-tête ; les lignes au-dessus = titre
       let h=keep.findIndex(rw=>cols.filter(i=>String(rw[i]??'').trim()!=='').length>=2);
       const title=keep.slice(0,h).map(rw=>rw.find(c=>String(c).trim()!=='')).filter(Boolean).join(' · ');

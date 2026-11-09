@@ -38,6 +38,8 @@ Tout ce qui change régulièrement est dans le dossier **`public/docs/`**, avec 
 2. Bouton **Add file → Upload files**, glisser le nouveau fichier **avec exactement le même nom** (`paiements.xlsx` ou `ag-derniere.docx`). Il remplace l'ancien.
 3. Bouton vert **Commit changes**. Vercel republie le site tout seul ; la date "Dernière mise à jour" se met à jour automatiquement.
 
+**Important — fichier des charges** : ne jamais déposer le classeur complet `CORSE_xxxx.xlsm` (il contient adresses, e-mails et comptes bancaires des copropriétaires). Déposer uniquement un petit classeur `paiements.xlsx` avec le bloc Recettes : dans Excel, onglet FINAL.XLS → sélectionner le bloc NOMS / MONTANT / APPEL EXCEP. / INTERNET jusqu'aux totaux → copier → Fichier › Nouveau → coller → Enregistrer sous `paiements.xlsx`. Le site reconnaît automatiquement la 1re ligne d'en-tête et met en évidence les lignes Perçu / Prévu / Total / Dépenses / Avance / Avoir.
+
 Pour ajouter une archive : déposer `ag-2026.docx` (ou `.pdf`) dans `public/docs/archives/` puis ajouter une ligne dans la liste `archives` en haut de `src/pages/assemblees.astro` (c'est la seule retouche "texte" nécessaire).
 
 Les chiffres clés de la page Finances (trésorerie, provisions) sont écrits dans `src/pages/finances.astro` — à mettre à jour une fois par an après l'AG.
