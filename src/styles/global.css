@@ -214,3 +214,8 @@ footer.site .ft span{white-space:nowrap}
 
 .ph-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 @media (prefers-reduced-motion: reduce){.ph-video{display:none}}
+
+/* compte rendu Word : tous les titres rendus comme du texte gras uniforme */
+.docx h1,.docx h2,.docx h3,.docx h4,.docx h5,.docx h6{font-family:inherit;font-weight:700;font-size:1em;line-height:1.55;letter-spacing:0;color:inherit;margin:1.2em 0 .4em}
+.docx p{margin:0 0 .8em}
+.docx strong{font-weight:700}
