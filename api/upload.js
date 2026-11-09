@@ -59,6 +59,20 @@ export default async function handler(req, res) {
   const pwd = req.headers['x-admin-password'];
   if (!safeEqual(String(pwd || ''), process.env.ADMIN_PASSWORD)) return res.status(401).json({ error: 'Mot de passe administrateur incorrect.' });
 
+  // Suppression d'une archive (seules les archives peuvent être supprimées ; les autres fichiers se corrigent en les renvoyant)
+  if (String(req.headers['x-action'] || '') === 'delete') {
+    const file = String(req.headers['x-file'] || '');
+    if (!/^ag-\d{4}\.(pdf|docx)$/.test(file)) return res.status(400).json({ error: 'Seules les archives d’AG (ag-AAAA.pdf/.docx) peuvent être supprimées.' });
+    const path = `public/docs/archives/${file}`;
+    try {
+      const sha = await getSha(path);
+      if (!sha) return res.status(404).json({ error: 'Ce fichier n’existe pas (ou plus).' });
+      const r = await gh('DELETE', path, { message: `Admin : suppression de l’archive ${file} (${new Date().toLocaleDateString('fr-FR')})`, sha, branch: BRANCH });
+      if (!r.ok) throw new Error(`GitHub ${r.status}: ${r.json.message || 'erreur'}`);
+      return res.status(200).json({ ok: true, message: `Archive ${file} supprimée. Le site se met à jour dans environ une minute.` });
+    } catch (e) { return res.status(502).json({ error: String(e.message || e) }); }
+  }
+
   const target = String(req.headers['x-target'] || '');
   const filename = decodeURIComponent(String(req.headers['x-filename'] || 'fichier'));
   const year = String(req.headers['x-year'] || '').trim();
