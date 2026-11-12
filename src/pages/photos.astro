@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PageHeader from '../components/PageHeader.astro';
-const travaux = ['portillon','img_1513jpg','img_1500jpg','img_1499jpg','img_1482jpg','img_1479jpg','carrelagecoteescalierjpg','img_1248jpg','rampes5jpg','alimportail','entreegravillons1jpg','murcomplet'];
+const travaux = ['arrosage-automatique','portillon','img_1513jpg','img_1500jpg','img_1499jpg','img_1482jpg','img_1479jpg','carrelagecoteescalierjpg','img_1248jpg','rampes5jpg','alimportail','entreegravillons1jpg','murcomplet'];
 const ravalement = ['img_0323jpg','img_0320jpg','img_0316jpg','img_0314jpg','img_0310jpg','img_0307jpg','img_0286jpg','img_0281jpg','img_0311jpg','img_0315jpg'];
 const fuite = ['fuite1-1','fuite2','fuite3','fuite4'];
 const pics = (list: string[], alt: string) => list.map((n, i) => ({ src: `/images/${n}.jpg`, alt: `${alt} — photo ${i + 1}` }));
@@ -14,7 +14,7 @@ const pics = (list: string[], alt: string) => list.map((n, i) => ({ src: `/image
 
   <section class="pad tight" id="travaux"><div class="wrap">
     <div class="kicker">Travaux récents</div>
-    <h2 class="t" style="font-size:30px">Portillon, rampes, carrelage, portail, gravillons, mur…</h2>
+    <h2 class="t" style="font-size:30px">Arrosage automatique rénové, portillon, carrelage, portail, gravillons, mur…</h2>
     <div class="gal">{pics(travaux, 'Travaux récents').map(p => <a href={p.src} target="_blank" rel="noopener" download><img src={p.src} alt={p.alt} loading="lazy" /></a>)}</div>
   </div></section>
 
