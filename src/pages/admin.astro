@@ -7,7 +7,14 @@ const archives = readdirSync('public/docs/archives').filter(f => /^ag-\d{4}\.(pd
 <Layout title="Administration" description="Mise à jour des documents du site">
   <PageHeader title="Mise à jour du site" kicker="Espace syndic" intro="Déposez ici le nouveau tableau des charges ou le dernier compte rendu d'AG. Le site se met à jour tout seul en une minute." />
 
-  <section class="pad tight" id="comptes-sec"><div class="wrap">
+  <section class="pad tight" style="padding-bottom:0"><div class="wrap">
+    <div class="tabs" role="tablist" aria-label="Sections de l'administration">
+      <button type="button" class="tab on" role="tab" data-tab="comptes" aria-selected="true">Comptes de l'exercice</button>
+      <button type="button" class="tab" role="tab" data-tab="docs" aria-selected="false">Compte rendu d'AG &amp; documents</button>
+    </div>
+  </div></section>
+
+  <section class="pad tight tabpane" id="comptes-sec" data-pane="comptes"><div class="wrap">
     <div class="box" style="display:flex;flex-direction:column;gap:18px">
       <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px">
         <div><div class="kicker">Comptes de l'exercice</div><h2 class="t" style="font-size:28px;margin:0">Recettes, dépenses et frais de bureau</h2></div>
@@ -26,18 +33,31 @@ const archives = readdirSync('public/docs/archives').filter(f => /^ag-\d{4}\.(pd
         <div class="field" style="margin:0"><label for="c-livret">Intérêts Livret A</label><input id="c-livret" inputmode="decimal"></div>
       </div>
 
-      <h3 style="margin:8px 0 0">1. Recettes par copropriétaire</h3>
+      <div class="tabs sub" role="tablist" aria-label="Blocs des comptes">
+        <button type="button" class="tab on" role="tab" data-sub="rec" aria-selected="true">1. Recettes</button>
+        <button type="button" class="tab" role="tab" data-sub="fb" aria-selected="false">2. Frais de bureau</button>
+        <button type="button" class="tab" role="tab" data-sub="dep" aria-selected="false">3. Dépenses</button>
+      </div>
+
+      <div class="subpane" data-subpane="rec">
+      <h3 style="margin:0">Recettes par copropriétaire</h3>
       <div class="sheet-wrap"><table class="sheet ed" id="t-rec"><thead><tr><th>Nom</th><th>Montant</th><th>Appel excep.</th><th>Internet</th><th>Note internet</th><th></th></tr></thead><tbody></tbody>
         <tfoot><tr class="tot"><td>Perçu</td><td class="num" id="s-percu"></td><td class="num" id="s-appel"></td><td class="num" id="s-inet"></td><td colspan="2"></td></tr><tr class="tot"><td>Reste à percevoir</td><td class="num" id="s-reste"></td><td colspan="4"></td></tr></tfoot></table></div>
-      <button type="button" class="btn ghost add" data-t="rec" style="align-self:flex-start;min-height:40px">+ Ajouter un copropriétaire</button>
+      <button type="button" class="btn ghost add" data-t="rec" style="align-self:flex-start;min-height:40px;margin-top:12px">+ Ajouter un copropriétaire</button>
+      </div>
 
-      <h3 style="margin:8px 0 0">2. Frais de bureau</h3>
+      <div class="subpane" data-subpane="fb" hidden>
+      <h3 style="margin:0">Frais de bureau</h3>
+      <p style="margin:0 0 10px;font-size:14px;color:var(--muted)">Le total est repris automatiquement dans les dépenses (ligne « Frais de bureau et d'AG »).</p>
       <div class="sheet-wrap"><table class="sheet ed" id="t-fb"><thead><tr><th>Poste</th><th>Montant</th><th></th></tr></thead><tbody></tbody><tfoot><tr class="tot"><td>Total frais de bureau</td><td class="num" id="s-fb"></td><td></td></tr></tfoot></table></div>
-      <button type="button" class="btn ghost add" data-t="fb" style="align-self:flex-start;min-height:40px">+ Ajouter une ligne</button>
+      <button type="button" class="btn ghost add" data-t="fb" style="align-self:flex-start;min-height:40px;margin-top:12px">+ Ajouter une ligne</button>
+      </div>
 
-      <h3 style="margin:8px 0 0">3. Dépenses de l'exercice</h3>
+      <div class="subpane" data-subpane="dep" hidden>
+      <h3 style="margin:0">Dépenses de l'exercice</h3>
       <div class="sheet-wrap"><table class="sheet ed" id="t-dep"><thead><tr><th>Poste</th><th>Montant</th><th></th></tr></thead><tbody></tbody><tfoot><tr><td>Frais de bureau et d'AG <small style="color:var(--muted)">(repris du bloc 2)</small></td><td class="num" id="s-fb2"></td><td></td></tr><tr class="tot"><td>Total dépenses</td><td class="num" id="s-dep"></td><td></td></tr></tfoot></table></div>
-      <button type="button" class="btn ghost add" data-t="dep" style="align-self:flex-start;min-height:40px">+ Ajouter une dépense</button>
+      <button type="button" class="btn ghost add" data-t="dep" style="align-self:flex-start;min-height:40px;margin-top:12px">+ Ajouter une dépense</button>
+      </div>
 
       <div class="field" style="margin:0"><label for="c-notes">Note affichée sous le tableau (facultatif)</label><input id="c-notes" placeholder="ex. Appel exceptionnel non réglé : aucun"></div>
 
@@ -57,7 +77,7 @@ const archives = readdirSync('public/docs/archives').filter(f => /^ag-\d{4}\.(pd
     </div>
   </div></section>
 
-  <section class="pad tight"><div class="wrap split">
+  <section class="pad tight tabpane" data-pane="docs" hidden><div class="wrap split">
     <form id="up" class="box" style="flex:2 1 520px;display:flex;flex-direction:column;gap:18px">
       <div class="field" style="margin:0">
         <label for="pwd">Mot de passe administrateur</label>
@@ -125,6 +145,14 @@ const archives = readdirSync('public/docs/archives').filter(f => /^ag-\d{4}\.(pd
   <script is:inline src="/js/xlsx.min.js"></script>
   <script is:inline src="/js/comptes.js"></script>
   <script is:inline>
+  (function(){
+    const act=(btns,key,attr,paneAttr)=>{btns.forEach(b=>{const on=b.dataset[attr]===key;b.classList.toggle('on',on);b.setAttribute('aria-selected',on)});document.querySelectorAll('['+paneAttr+']').forEach(p=>p.hidden=p.getAttribute(paneAttr)!==key);try{localStorage.setItem('admin-'+attr,key)}catch(e){}};
+    const main=[...document.querySelectorAll('.tabs:not(.sub) .tab')], sub=[...document.querySelectorAll('.tabs.sub .tab')];
+    main.forEach(b=>b.addEventListener('click',()=>act(main,b.dataset.tab,'tab','data-pane')));
+    sub.forEach(b=>b.addEventListener('click',()=>act(sub,b.dataset.sub,'sub','data-subpane')));
+    try{const m=localStorage.getItem('admin-tab');if(m)act(main,m,'tab','data-pane');const s=localStorage.getItem('admin-sub');if(s)act(sub,s,'sub','data-subpane');}catch(e){}
+    if(location.hash==='#docs')act(main,'docs','tab','data-pane');
+  })();
   (function(){
     const $=id=>document.getElementById(id); const N=Comptes.num, E=Comptes.eur;
     let D={exercice:'',etabliLe:'',recettes:[],prevu:{montant:0,internet:0},avanceProvision:0,avoirInternet:0,avoirInternetDate:'',interetsLivret:0,fraisBureau:[],depenses:[],notes:''};

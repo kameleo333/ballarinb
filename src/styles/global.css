@@ -247,3 +247,13 @@ table.sheet.ed input.w-name{min-width:220px}table.sheet.ed input.w-num{width:120
 table.sheet.ed .rm{width:34px;height:34px;border-radius:8px;border:0;background:transparent;color:var(--terra);font-weight:800;cursor:pointer}
 table.sheet.ed .rm:hover{background:var(--peach)}
 table.sheet.ed tfoot td{border-top:2px solid var(--sun);background:var(--sand);font-weight:800;color:var(--deep)}
+
+/* onglets admin */
+.tabs{display:flex;flex-wrap:wrap;gap:8px;border-bottom:2px solid var(--lightblue);padding-bottom:0}
+.tabs .tab{appearance:none;border:2px solid transparent;border-bottom:0;background:transparent;font:inherit;font-weight:800;font-size:16px;color:var(--muted);padding:12px 18px;border-radius:14px 14px 0 0;cursor:pointer;margin-bottom:-2px;min-height:48px}
+.tabs .tab:hover{color:var(--deep);background:var(--sand)}
+.tabs .tab.on{color:var(--deep);background:#fff;border-color:var(--lightblue);border-bottom:2px solid #fff}
+.tabs.sub{border-bottom-color:var(--sand)}
+.tabs.sub .tab{font-size:15px;padding:10px 16px;min-height:44px}
+.tabs.sub .tab.on{background:var(--sand);border-color:var(--sand);border-bottom-color:var(--sand)}
+.subpane{display:flex;flex-direction:column;gap:12px}
