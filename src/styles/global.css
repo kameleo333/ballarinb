@@ -257,3 +257,4 @@ table.sheet.ed tfoot td{border-top:2px solid var(--sun);background:var(--sand);f
 .tabs.sub .tab{font-size:15px;padding:10px 16px;min-height:44px}
 .tabs.sub .tab.on{background:var(--sand);border-color:var(--sand);border-bottom-color:var(--sand)}
 .subpane{display:flex;flex-direction:column;gap:12px}
+.subpane[hidden],.tabpane[hidden]{display:none!important}
