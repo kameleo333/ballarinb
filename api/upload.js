@@ -13,6 +13,7 @@ const TARGETS = {
   ag:        { path: 'public/docs/ag-derniere.docx', ext: ['docx'], label: 'Dernier compte rendu d’AG (Word)' },
   archive:   { path: null, ext: ['pdf', 'docx'], label: 'Archive d’AG' },
   carnet:    { path: 'public/docs/carnet-entretien.pdf', ext: ['pdf'], label: 'Carnet d’entretien (PDF)' },
+  comptes:   { path: 'public/docs/comptes.json', ext: [], label: 'Comptes (recettes, dépenses, frais de bureau)' },
 };
 
 function readBody(req) {

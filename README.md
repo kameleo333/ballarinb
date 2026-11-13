@@ -23,7 +23,10 @@ Le mot de passe est vérifié par `middleware.js` (Vercel Edge Middleware). Une 
 
 ## Mise à jour du contenu — mode d'emploi pour le syndic (aucune ligne de code)
 
-### Méthode simple : la page `/admin` (recommandée)
+### Comptes (recettes, dépenses, frais de bureau) : éditeur en ligne dans `/admin`
+Les chiffres affichés sur les pages Charges et Finances viennent de `public/docs/comptes.json`, modifiable directement dans `/admin` (bloc « Comptes de l'exercice ») : saisie dans les cases, totaux automatiques (perçu, reste, frais de bureau → dépenses → nouvel avoir), bouton **Enregistrer** → écrit dans GitHub via `api/comptes.js` et les pages publiques lisent la nouvelle version **immédiatement** (`/api/comptes`, avec repli sur le fichier statique). « Importer un Excel » pré-remplit depuis le classeur du syndic (onglets FINAL.XLS + FRAISBU00). Le bouton « Annuler » de la liste Documents actuels revient à la version précédente.
+
+### Autres documents : la page `/admin`
 Se connecter au site, ouvrir `/admin` (lien « Espace syndic » en bas de page), saisir le mot de passe administrateur, choisir le type de document, sélectionner le fichier, Envoyer. Le fichier est enregistré dans le dépôt GitHub par la fonction `api/upload.js` et Vercel republie le site (~1 min). Les archives d'AG (`public/docs/archives/ag-AAAA.pdf|docx`) apparaissent automatiquement dans la liste.
 
 Variables Vercel nécessaires en plus : `ADMIN_PASSWORD` (mot de passe de la page admin) et `GITHUB_TOKEN` (token GitHub *fine-grained*, dépôt `ballarinb` uniquement, permission **Contents : Read and write**, à renouveler avant expiration).
@@ -34,8 +37,8 @@ Tout ce qui change régulièrement est dans le dossier **`public/docs/`**, avec 
 
 | Fichier | Contenu | Quand le remplacer |
 |---|---|---|
-| `public/docs/paiements.xlsx` | Tableau des règlements de charges (fichier Excel, 1er onglet) — affiché comme un vrai tableau sur le site | Chaque mois |
-| `public/docs/paiements.jpg` | Ancienne version image, utilisée seulement si le .xlsx est absent | — |
+| `public/docs/comptes.json` | Recettes par copropriétaire, dépenses, frais de bureau (édité depuis `/admin`) | Chaque mois |
+| `public/docs/paiements.jpg` | Ancienne version image, utilisée seulement si les comptes sont indisponibles | — |
 | `public/docs/ag-derniere.docx` | Compte rendu de la dernière AG (Word) | Après chaque AG |
 | `public/docs/archives/ag-AAAA.pdf` ou `.docx` | Anciens comptes rendus | Après chaque AG : y déplacer l'ancien "dernier" |
 | `public/docs/carnet-entretien.pdf` | Carnet d'entretien | Rarement |

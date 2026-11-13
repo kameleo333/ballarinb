@@ -25,6 +25,13 @@ import PageHeader from '../components/PageHeader.astro';
     </div>
   </div></section>
 
+  <section class="pad tight" id="dep-wrap" hidden><div class="wrap">
+    <div class="kicker">Exercice en cours</div>
+    <h2 class="t" style="font-size:30px">Dépenses de l'exercice</h2>
+    <p style="font-size:15px;color:var(--muted);margin:0 0 14px">Tenu à jour par le syndic au fil des factures.</p>
+    <div class="sheet-wrap" style="max-width:760px"><div id="depenses"></div></div>
+  </div></section>
+
   <section class="pad" style="background:var(--sand)"><div class="wrap split">
     <div style="flex:2 1 480px">
       <div class="kicker">Parties communes</div>
@@ -40,20 +47,14 @@ import PageHeader from '../components/PageHeader.astro';
       <p style="font-size:15px;margin:0;color:var(--muted)">C'est pourquoi les totaux diffèrent du relevé EDF, qui couvre les deux semestres d'une même année civile.</p>
     </aside>
   </div></section>
-  <script is:inline src="/js/xlsx.min.js"></script>
+  <script is:inline src="/js/comptes.js"></script>
   <script is:inline>
   (async()=>{
     try{
-      const r=await fetch('/docs/paiements.xlsx',{cache:'no-store'}); if(!r.ok) return;
-      const buf=await r.arrayBuffer(); const sig=new Uint8Array(buf.slice(0,2)); if(!(sig[0]===0x50&&sig[1]===0x4B)) return;
-      const wb=XLSX.read(buf,{type:'array'}); const rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:'',raw:true});
-      const find=re=>{const rw=rows.find(x=>re.test(String(x[0]||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'')));return rw?rw.find((v,i)=>i>0&&typeof v==='number'):null};
-      const percu=find(/^\s*percu/i), prevu=find(/^\s*prevu/i);
-      if(typeof percu!=='number'||typeof prevu!=='number') return;
-      const f=n=>n.toLocaleString('fr-FR',{minimumFractionDigits:Number.isInteger(n)?0:2,maximumFractionDigits:2})+' €';
-      const reste=Math.max(0,prevu-percu);
-      const b=document.getElementById('reste'); b.textContent=f(reste); b.style.color=reste>0?'#B5451B':'#1E6E45';
-      document.getElementById('reste-sub').textContent='prévu '+f(prevu)+' − perçu '+f(percu);
+      const d=await Comptes.load(), c=Comptes.compute(d);
+      const b=document.getElementById('reste'); b.textContent=Comptes.eur(c.reste); b.style.color=c.reste>0?'#B5451B':'#1E6E45';
+      document.getElementById('reste-sub').textContent='prévu '+Comptes.eur(c.prevu)+' − perçu '+Comptes.eur(c.percu);
+      const dep=document.getElementById('depenses'); if(dep){dep.innerHTML=Comptes.renderDepenses(d); document.getElementById('dep-wrap').hidden=false;}
     }catch(e){console.warn(e)}
   })();
   </script>

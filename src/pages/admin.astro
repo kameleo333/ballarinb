@@ -7,6 +7,56 @@ const archives = readdirSync('public/docs/archives').filter(f => /^ag-\d{4}\.(pd
 <Layout title="Administration" description="Mise à jour des documents du site">
   <PageHeader title="Mise à jour du site" kicker="Espace syndic" intro="Déposez ici le nouveau tableau des charges ou le dernier compte rendu d'AG. Le site se met à jour tout seul en une minute." />
 
+  <section class="pad tight" id="comptes-sec"><div class="wrap">
+    <div class="box" style="display:flex;flex-direction:column;gap:18px">
+      <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px">
+        <div><div class="kicker">Comptes de l'exercice</div><h2 class="t" style="font-size:28px;margin:0">Recettes, dépenses et frais de bureau</h2></div>
+        <div class="btns" style="margin:0"><label class="btn ghost" style="cursor:pointer">Importer un Excel<input type="file" id="imp" accept=".xlsx,.xlsm" hidden></label><button type="button" class="btn ghost" id="dl2">Télécharger (Excel)</button></div>
+      </div>
+      <p style="margin:0;font-size:14px;color:var(--muted)">Saisissez directement dans les cases. Les totaux se calculent tout seuls. Cliquez sur <b>Enregistrer</b> en bas : les pages Charges et Finances sont mises à jour immédiatement.</p>
+
+      <div class="ed-grid">
+        <div class="field" style="margin:0"><label for="c-exercice">Exercice</label><input id="c-exercice" placeholder="2026/2027"></div>
+        <div class="field" style="margin:0"><label for="c-date">Établi au</label><input id="c-date" type="date"></div>
+        <div class="field" style="margin:0"><label for="c-prevu">Prévu — montant total</label><input id="c-prevu" inputmode="decimal"></div>
+        <div class="field" style="margin:0"><label for="c-prevu-i">Prévu — internet total</label><input id="c-prevu-i" inputmode="decimal"></div>
+        <div class="field" style="margin:0"><label for="c-avance">Avance / provision reportée</label><input id="c-avance" inputmode="decimal"></div>
+        <div class="field" style="margin:0"><label for="c-avoir">Avoir internet</label><input id="c-avoir" inputmode="decimal"></div>
+        <div class="field" style="margin:0"><label for="c-avoir-d">Avoir internet au (date)</label><input id="c-avoir-d" placeholder="02/11"></div>
+        <div class="field" style="margin:0"><label for="c-livret">Intérêts Livret A</label><input id="c-livret" inputmode="decimal"></div>
+      </div>
+
+      <h3 style="margin:8px 0 0">1. Recettes par copropriétaire</h3>
+      <div class="sheet-wrap"><table class="sheet ed" id="t-rec"><thead><tr><th>Nom</th><th>Montant</th><th>Appel excep.</th><th>Internet</th><th>Note internet</th><th></th></tr></thead><tbody></tbody>
+        <tfoot><tr class="tot"><td>Perçu</td><td class="num" id="s-percu"></td><td class="num" id="s-appel"></td><td class="num" id="s-inet"></td><td colspan="2"></td></tr><tr class="tot"><td>Reste à percevoir</td><td class="num" id="s-reste"></td><td colspan="4"></td></tr></tfoot></table></div>
+      <button type="button" class="btn ghost add" data-t="rec" style="align-self:flex-start;min-height:40px">+ Ajouter un copropriétaire</button>
+
+      <h3 style="margin:8px 0 0">2. Frais de bureau</h3>
+      <div class="sheet-wrap"><table class="sheet ed" id="t-fb"><thead><tr><th>Poste</th><th>Montant</th><th></th></tr></thead><tbody></tbody><tfoot><tr class="tot"><td>Total frais de bureau</td><td class="num" id="s-fb"></td><td></td></tr></tfoot></table></div>
+      <button type="button" class="btn ghost add" data-t="fb" style="align-self:flex-start;min-height:40px">+ Ajouter une ligne</button>
+
+      <h3 style="margin:8px 0 0">3. Dépenses de l'exercice</h3>
+      <div class="sheet-wrap"><table class="sheet ed" id="t-dep"><thead><tr><th>Poste</th><th>Montant</th><th></th></tr></thead><tbody></tbody><tfoot><tr><td>Frais de bureau et d'AG <small style="color:var(--muted)">(repris du bloc 2)</small></td><td class="num" id="s-fb2"></td><td></td></tr><tr class="tot"><td>Total dépenses</td><td class="num" id="s-dep"></td><td></td></tr></tfoot></table></div>
+      <button type="button" class="btn ghost add" data-t="dep" style="align-self:flex-start;min-height:40px">+ Ajouter une dépense</button>
+
+      <div class="field" style="margin:0"><label for="c-notes">Note affichée sous le tableau (facultatif)</label><input id="c-notes" placeholder="ex. Appel exceptionnel non réglé : aucun"></div>
+
+      <div class="kpis">
+        <div class="kpi"><small>Perçu</small><b id="k-percu">—</b></div>
+        <div class="kpi"><small>Reste à percevoir</small><b id="k-reste">—</b></div>
+        <div class="kpi"><small>Total dépenses</small><b id="k-dep">—</b></div>
+        <div class="kpi"><small>Nouvel avoir</small><b id="k-avoir">—</b><span>avance + recettes − dépenses</span></div>
+      </div>
+
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px">
+        <div class="field" style="margin:0;flex:1 1 220px"><label for="c-pwd">Mot de passe administrateur</label><input id="c-pwd" type="password" autocomplete="current-password"></div>
+        <div class="field" style="margin:0;flex:1 1 220px"><label for="c-note">Commentaire (facultatif)</label><input id="c-note" maxlength="120" placeholder="ex. règlements de décembre"></div>
+        <button type="button" class="btn sun" id="c-save" style="margin-top:22px">Enregistrer</button>
+      </div>
+      <div id="c-msg" hidden style="padding:14px 16px;border-radius:12px;font-weight:700"></div>
+    </div>
+  </div></section>
+
   <section class="pad tight"><div class="wrap split">
     <form id="up" class="box" style="flex:2 1 520px;display:flex;flex-direction:column;gap:18px">
       <div class="field" style="margin:0">
@@ -16,8 +66,7 @@ const archives = readdirSync('public/docs/archives').filter(f => /^ag-\d{4}\.(pd
 
       <fieldset style="border:0;padding:0;margin:0;display:flex;flex-direction:column;gap:10px">
         <legend style="font-weight:800;font-size:14px;margin-bottom:6px">Que voulez-vous mettre à jour ?</legend>
-        <label class="radio"><input type="radio" name="target" value="paiements" checked> <span><b>Tableau des charges</b> — fichier Excel <code>.xlsx</code> (bloc Recettes uniquement, jamais le classeur complet)</span></label>
-        <label class="radio"><input type="radio" name="target" value="ag"> <span><b>Nouveau compte rendu d'AG</b> — fichier Word <code>.docx</code></span></label>
+        <label class="radio"><input type="radio" name="target" value="ag" checked> <span><b>Nouveau compte rendu d'AG</b> — fichier Word <code>.docx</code></span></label>
         <label class="radio"><input type="radio" name="target" value="archive"> <span><b>Ajouter / corriger une archive d'AG</b> — <code>.pdf</code> ou <code>.docx</code></span></label>
         <label class="radio"><input type="radio" name="target" value="carnet"> <span><b>Carnet d'entretien</b> — <code>.pdf</code></span></label>
       </fieldset>
@@ -65,7 +114,7 @@ const archives = readdirSync('public/docs/archives').filter(f => /^ag-\d{4}\.(pd
         <h3>Documents actuels</h3>
         <p style="font-size:14px;color:var(--muted);margin:0 0 8px">Envoi fait par erreur ? « Annuler » remet la version d'avant le dernier envoi.</p>
         <ul class="list">
-          <li style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 6px"><a href="/docs/paiements.xlsx" download style="padding:0;min-height:0">Tableau des charges<small>paiements.xlsx</small></a><button type="button" class="btn ghost undo" data-target="paiements" data-label="Tableau des charges" style="min-height:36px;padding:0 12px;font-size:13px">Annuler</button></li>
+          <li style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 6px"><a href="/charges" style="padding:0;min-height:0">Comptes (recettes, dépenses)<small>comptes.json — éditeur ci-dessus</small></a><button type="button" class="btn ghost undo" data-target="comptes" data-label="Comptes" style="min-height:36px;padding:0 12px;font-size:13px">Annuler</button></li>
           <li style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 6px"><a href="/docs/ag-derniere.docx" download style="padding:0;min-height:0">Dernier compte rendu d'AG<small>ag-derniere.docx</small></a><button type="button" class="btn ghost undo" data-target="ag" data-label="Dernier compte rendu d'AG" style="min-height:36px;padding:0 12px;font-size:13px">Annuler</button></li>
           <li style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 6px"><a href="/docs/carnet-entretien.pdf" target="_blank" rel="noopener" style="padding:0;min-height:0">Carnet d'entretien<small>carnet-entretien.pdf</small></a><button type="button" class="btn ghost undo" data-target="carnet" data-label="Carnet d'entretien" style="min-height:36px;padding:0 12px;font-size:13px">Annuler</button></li>
         </ul>
@@ -73,6 +122,73 @@ const archives = readdirSync('public/docs/archives').filter(f => /^ag-\d{4}\.(pd
     </aside>
   </div></section>
 
+  <script is:inline src="/js/xlsx.min.js"></script>
+  <script is:inline src="/js/comptes.js"></script>
+  <script is:inline>
+  (function(){
+    const $=id=>document.getElementById(id); const N=Comptes.num, E=Comptes.eur;
+    let D={exercice:'',etabliLe:'',recettes:[],prevu:{montant:0,internet:0},avanceProvision:0,avoirInternet:0,avoirInternetDate:'',interetsLivret:0,fraisBureau:[],depenses:[],notes:''};
+    const fmt=v=>v?String(v).replace('.',','):'';
+    function cell(val,cls,ph){const i=document.createElement('input');i.value=val??'';i.className=cls||'';if(ph)i.placeholder=ph;return i}
+    function row(kind,r,idx){
+      const tr=document.createElement('tr');
+      const add=(inp,key,numeric)=>{const td=document.createElement('td');if(numeric)td.className='num';td.appendChild(inp);inp.addEventListener('input',()=>{r[key]=numeric?N(inp.value):inp.value;totals()});tr.appendChild(td)};
+      if(kind==='rec'){add(cell(r.nom,'w-name','Nom'),'nom');add(cell(fmt(r.montant),'w-num'),'montant',1);add(cell(fmt(r.appel),'w-num'),'appel',1);add(cell(fmt(r.internet),'w-num'),'internet',1);add(cell(r.internetNote,'w-note','ex. Non souscrit'),'internetNote');}
+      else{add(cell(r.poste,'w-name','Libellé'),'poste');add(cell(fmt(r.montant),'w-num'),'montant',1);}
+      const td=document.createElement('td');const b=document.createElement('button');b.type='button';b.textContent='✕';b.title='Retirer la ligne';b.className='rm';b.addEventListener('click',()=>{const arr=kind==='rec'?D.recettes:kind==='fb'?D.fraisBureau:D.depenses;arr.splice(arr.indexOf(r),1);render()});td.appendChild(b);tr.appendChild(td);
+      return tr;
+    }
+    function render(){
+      $('c-exercice').value=D.exercice||'';$('c-date').value=D.etabliLe||'';$('c-prevu').value=fmt(D.prevu.montant);$('c-prevu-i').value=fmt(D.prevu.internet);$('c-avance').value=fmt(D.avanceProvision);$('c-avoir').value=fmt(D.avoirInternet);$('c-avoir-d').value=D.avoirInternetDate||'';$('c-livret').value=fmt(D.interetsLivret);$('c-notes').value=D.notes||'';
+      for(const [kind,id,arr] of [['rec','t-rec',D.recettes],['fb','t-fb',D.fraisBureau],['dep','t-dep',D.depenses]]){const tb=document.querySelector('#'+id+' tbody');tb.innerHTML='';arr.forEach((r,i)=>tb.appendChild(row(kind,r,i)));}
+      totals();
+    }
+    function totals(){
+      const c=Comptes.compute(D);
+      $('s-percu').textContent=E(c.percu);$('s-appel').textContent=c.appel?E(c.appel):'';$('s-inet').textContent=E(c.internet);$('s-reste').textContent=E(c.reste);
+      $('s-fb').textContent=E(c.fraisBureau);$('s-fb2').textContent=E(c.fraisBureau);$('s-dep').textContent=E(c.depenses);
+      $('k-percu').textContent=E(c.percu);$('k-reste').textContent=E(c.reste);$('k-dep').textContent=E(c.depenses);$('k-avoir').textContent=E(c.nouvelAvoir);
+    }
+    const bind=(id,fn)=>$(id).addEventListener('input',()=>{fn($(id).value);totals()});
+    bind('c-exercice',v=>D.exercice=v);bind('c-date',v=>D.etabliLe=v);bind('c-prevu',v=>D.prevu.montant=N(v));bind('c-prevu-i',v=>D.prevu.internet=N(v));bind('c-avance',v=>D.avanceProvision=N(v));bind('c-avoir',v=>D.avoirInternet=N(v));bind('c-avoir-d',v=>D.avoirInternetDate=v);bind('c-livret',v=>D.interetsLivret=N(v));bind('c-notes',v=>D.notes=v);
+    document.querySelectorAll('button.add').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.t;if(k==='rec')D.recettes.push({nom:'',montant:0,appel:0,internet:0,internetNote:''});else (k==='fb'?D.fraisBureau:D.depenses).push({poste:'',montant:0});render();const tb=document.querySelector('#t-'+k+' tbody');const last=tb.lastElementChild;if(last)last.querySelector('input').focus();}));
+    function show(text,ok){const m=$('c-msg');m.hidden=false;m.textContent=text;m.style.background=ok?'#E6F4EC':'#FDE2D6';m.style.color=ok?'#1E6E45':'#8A2E0C';}
+    $('c-save').addEventListener('click',async()=>{
+      const pwd=$('c-pwd').value||document.getElementById('pwd').value; if(!pwd){show('Saisissez le mot de passe administrateur.',false);return;}
+      $('c-save').disabled=true;$('c-save').textContent='Enregistrement…';
+      try{const r=await fetch('/api/comptes',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Password':pwd,'X-Note':encodeURIComponent($('c-note').value.trim())},body:JSON.stringify(D)});const j=await r.json().catch(()=>({}));
+        if(r.ok&&j.ok)show('✓ '+j.message,true);else show(j.error||('Erreur '+r.status),false);
+      }catch(e){show('Erreur réseau : '+e,false);}
+      $('c-save').disabled=false;$('c-save').textContent='Enregistrer';
+    });
+    $('dl2').addEventListener('click',()=>{const wb=Comptes.toWorkbook(D);if(wb)XLSX.writeFile(wb,'comptes-ballarin-b.xlsx');});
+    // Import depuis le classeur du syndic (onglets FINAL.XLS + FRAISBU00) ou un paiements.xlsx simple
+    $('imp').addEventListener('change',async e=>{
+      const f=e.target.files[0]; if(!f) return;
+      try{
+        const wb=XLSX.read(await f.arrayBuffer(),{type:'array'});
+        const sh=n=>{const k=wb.SheetNames.find(x=>x.toUpperCase().startsWith(n));return k?XLSX.utils.sheet_to_json(wb.Sheets[k],{header:1,defval:'',raw:true}):null};
+        const F=sh('FINAL')||XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:'',raw:true});
+        const S=v=>String(v??'').trim(); const up=v=>S(v).toUpperCase();
+        const hi=F.findIndex(r=>up(r[0]).startsWith('NOMS')); if(hi<0) throw new Error('Ligne « NOMS » introuvable dans le fichier.');
+        const hdr=F[hi]; const col=name=>hdr.findIndex(h=>up(h).startsWith(name));
+        const cM=col('MONTANT'),cA=col('APPEL'),cI=col('INTERNET');
+        const rec=[]; for(let i=hi+1;i<F.length;i++){const r=F[i];const a=S(r[0]);if(!a){if(rec.length)break;continue;}if(/^(PER[CÇ]U|PR[EÉ]VU|TOTAL)/i.test(a))break;const inet=cI>=0?r[cI]:'';rec.push({nom:a.replace(/\s+/g,' '),montant:N(r[cM]),appel:cA>=0?N(r[cA]):0,internet:typeof inet==='number'?inet:0,internetNote:typeof inet==='number'||!S(inet)?'':S(inet)});}
+        const find=re=>F.find(r=>re.test(up(r[0])));
+        const prevu=find(/^PR[EÉ]VU/); const ai=F.findIndex(r=>up(r[0]).startsWith('AVANCE PROVISION')); const val=ai>=0?F[ai+1]:null;
+        // dépenses : colonne « POSTES » si présente (FINAL.XLS)
+        const cP=hdr.findIndex(h=>up(h)==='POSTES'); const dep=[]; let cPM=-1;
+        if(cP>=0){cPM=hdr.findIndex((h,i)=>i>cP&&up(h).startsWith('MONTANT'));for(let i=hi+1;i<F.length;i++){const r=F[i];const p=S(r[cP]);if(up(p).startsWith('TOTAL'))break;if(!p||/^FRAIS BUREAU/i.test(p))continue;dep.push({poste:p.replace(/\s+/g,' '),montant:N(r[cPM])});}
+          const ii=F.find(r=>up(r[cP]).startsWith('INTERNET (POINT'));if(ii)dep.push({poste:'Internet (abonnement, depuis juillet)',montant:N(ii[cPM])});}
+        const B=sh('FRAISBU'); const fb=[]; if(B){const m={};for(const r of B.slice(3,11)){for(const [l,a] of [[r[0],r[1]],[r[5],r[6]]]){if(S(l)&&up(l)!=='TOTAL'){m[S(l)]=(m[S(l)]||0)+N(a);}}}if(typeof B[3][3]==='number')m['Téléphone (forfait fixe)']=B[3][3];for(const k in m)fb.push({poste:k,montant:m[k]});}
+        D={...D,recettes:rec.length?rec:D.recettes,prevu:{montant:prevu?N(prevu[cM]):D.prevu.montant,internet:prevu&&cI>=0?N(prevu[cI]):D.prevu.internet},avanceProvision:val?N(val[0]):D.avanceProvision,avoirInternet:val?N(val[3]):D.avoirInternet,depenses:dep.length?dep:D.depenses,fraisBureau:fb.length?fb:D.fraisBureau};
+        render(); show('Fichier importé : '+rec.length+' copropriétaires'+(dep.length?', '+dep.length+' dépenses':'')+(fb.length?', '+fb.length+' lignes de frais de bureau':'')+'. Vérifiez puis cliquez sur Enregistrer.',true);
+      }catch(err){show('Import impossible : '+(err.message||err),false);}
+      e.target.value='';
+    });
+    Comptes.load().then(d=>{D=d;render();}).catch(()=>{render();show('Impossible de charger les comptes actuels (vérifiez la configuration GITHUB_TOKEN).',false);});
+  })();
+  </script>
   <script is:inline>
     document.querySelectorAll('button.del').forEach(b=>b.addEventListener('click',async()=>{
       const f=b.dataset.file; const pwd=document.getElementById('pwd').value;
@@ -97,7 +213,7 @@ const archives = readdirSync('public/docs/archives').filter(f => /^ag-\d{4}\.(pd
       b.disabled=false; b.textContent='Annuler';
     }));
     const form=document.getElementById('up'), msg=document.getElementById('msg'), yearWrap=document.getElementById('year-wrap'), yearLabel=document.getElementById('year-label'), yearHelp=document.getElementById('year-help'), fileIn=document.getElementById('file'), send=document.getElementById('send');
-    const accept={paiements:'.xlsx',ag:'.docx',archive:'.pdf,.docx',carnet:'.pdf'};
+    const accept={ag:'.docx',archive:'.pdf,.docx',carnet:'.pdf'};
     function sync(){
       const t=form.target.value; fileIn.accept=accept[t];
       yearWrap.hidden=!(t==='ag'||t==='archive');

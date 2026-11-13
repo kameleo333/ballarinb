@@ -236,3 +236,14 @@ label.radio{display:flex;gap:10px;align-items:flex-start;font-weight:600;font-si
 label.radio:has(input:checked){border-color:var(--sun);background:var(--sand)}
 label.radio input{width:18px;height:18px;min-height:0;margin:3px 0 0;flex:none}
 label.radio code{font-size:13px;background:#fff;padding:1px 6px;border-radius:6px}
+
+/* éditeur des comptes (admin) */
+.ed-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+table.sheet.ed td{padding:6px 8px}
+table.sheet.ed input{min-height:40px;padding:6px 10px;border:2px solid transparent;border-radius:8px;background:transparent;font-size:15px}
+table.sheet.ed input:hover{border-color:var(--lightblue)}
+table.sheet.ed input:focus{background:#fff;border-color:var(--sun);outline:0}
+table.sheet.ed input.w-name{min-width:220px}table.sheet.ed input.w-num{width:120px;text-align:right}table.sheet.ed input.w-note{min-width:150px}
+table.sheet.ed .rm{width:34px;height:34px;border-radius:8px;border:0;background:transparent;color:var(--terra);font-weight:800;cursor:pointer}
+table.sheet.ed .rm:hover{background:var(--peach)}
+table.sheet.ed tfoot td{border-top:2px solid var(--sun);background:var(--sand);font-weight:800;color:var(--deep)}
