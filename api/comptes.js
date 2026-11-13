@@ -7,6 +7,19 @@ const REPO = process.env.GITHUB_REPO || 'kameleo333/ballarinb';
 const BRANCH = process.env.GITHUB_BRANCH || 'main';
 const PATH = 'public/docs/comptes.json';
 
+
+async function adminToken() {
+  const data = new TextEncoder().encode(`${process.env.ADMIN_PASSWORD}|${(process.env.SESSION_SECRET || 'ballarin-b') + '|admin'}`);
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  return [...new Uint8Array(hash)].map(b => b.toString(16).padStart(2, '0')).join('');
+}
+async function isAdminReq(req) {
+  const pwd = String(req.headers['x-admin-password'] || '');
+  if (pwd && safeEqual(pwd, process.env.ADMIN_PASSWORD)) return true;
+  const m = String(req.headers['cookie'] || '').match(/(?:^|;\s*)bb_admin=([^;]*)/);
+  return !!m && m[1] === await adminToken();
+}
+
 function safeEqual(a, b) { if (typeof a !== 'string' || typeof b !== 'string' || a.length !== b.length) return false; let r = 0; for (let i = 0; i < a.length; i++) r |= a.charCodeAt(i) ^ b.charCodeAt(i); return r === 0; }
 
 async function gh(method, url, body) {
@@ -50,7 +63,7 @@ export default async function handler(req, res) {
 
   if (req.method === 'POST') {
     if (!process.env.ADMIN_PASSWORD) return res.status(500).json({ error: 'ADMIN_PASSWORD manquant.' });
-    if (!safeEqual(String(req.headers['x-admin-password'] || ''), process.env.ADMIN_PASSWORD)) return res.status(401).json({ error: 'Mot de passe administrateur incorrect.' });
+    if (!(await isAdminReq(req))) return res.status(401).json({ error: 'Session administrateur requise : reconnectez-vous à l’espace syndic.' });
     let data;
     try { data = sanitize(typeof req.body === 'string' ? JSON.parse(req.body) : req.body); } catch (e) { return res.status(400).json({ error: e.message || 'Données invalides.' }); }
     try {

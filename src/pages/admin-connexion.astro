@@ -1,0 +1,17 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Espace syndic — connexion">
+  <section class="pad" style="min-height:60vh;display:flex;align-items:center"><div class="wrap" style="display:flex;justify-content:center">
+    <form method="post" action="/api/admin-login" class="box" style="width:100%;max-width:420px">
+      <div class="kicker">Espace syndic</div>
+      <h1 style="font-size:28px;margin:0 0 6px">Connexion administrateur</h1>
+      <p style="margin:0 0 16px;font-size:15px;color:var(--muted)">Réservé au syndic. Mot de passe différent de celui du site.</p>
+      <div id="err" hidden style="margin-bottom:14px;padding:10px 14px;border-radius:12px;background:#FDE2D6;color:#8A2E0C;font-weight:700;font-size:14px">Mot de passe incorrect.</div>
+      <div class="field"><label for="apwd">Mot de passe administrateur</label><input id="apwd" name="password" type="password" autocomplete="current-password" required autofocus></div>
+      <button class="btn sun" type="submit" style="width:100%">Entrer</button>
+      <p style="margin:14px 0 0;font-size:13px;color:var(--muted)">La session reste ouverte 30 jours sur cet appareil.</p>
+    </form>
+  </div></section>
+  <script is:inline>if(new URLSearchParams(location.search).get('erreur'))document.getElementById('err').hidden=false;</script>
+</Layout>

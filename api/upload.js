@@ -25,6 +25,19 @@ function readBody(req) {
   });
 }
 
+
+async function adminToken() {
+  const data = new TextEncoder().encode(`${process.env.ADMIN_PASSWORD}|${(process.env.SESSION_SECRET || 'ballarin-b') + '|admin'}`);
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  return [...new Uint8Array(hash)].map(b => b.toString(16).padStart(2, '0')).join('');
+}
+async function isAdminReq(req) {
+  const pwd = String(req.headers['x-admin-password'] || '');
+  if (pwd && safeEqual(pwd, process.env.ADMIN_PASSWORD)) return true;
+  const m = String(req.headers['cookie'] || '').match(/(?:^|;\s*)bb_admin=([^;]*)/);
+  return !!m && m[1] === await adminToken();
+}
+
 function safeEqual(a, b) {
   if (typeof a !== 'string' || typeof b !== 'string' || a.length !== b.length) return false;
   let r = 0; for (let i = 0; i < a.length; i++) r |= a.charCodeAt(i) ^ b.charCodeAt(i); return r === 0;
@@ -57,8 +70,7 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Méthode non autorisée' });
   if (!process.env.ADMIN_PASSWORD || !process.env.GITHUB_TOKEN) return res.status(500).json({ error: 'Configuration serveur incomplète (ADMIN_PASSWORD / GITHUB_TOKEN).' });
 
-  const pwd = req.headers['x-admin-password'];
-  if (!safeEqual(String(pwd || ''), process.env.ADMIN_PASSWORD)) return res.status(401).json({ error: 'Mot de passe administrateur incorrect.' });
+  if (!(await isAdminReq(req))) return res.status(401).json({ error: 'Session administrateur requise : reconnectez-vous à l’espace syndic.' });
 
   // Suppression d'une archive (seules les archives peuvent être supprimées ; les autres fichiers se corrigent en les renvoyant)
   if (String(req.headers['x-action'] || '') === 'delete') {

@@ -5,7 +5,8 @@ import { readdirSync } from 'node:fs';
 const archives = readdirSync('public/docs/archives').filter(f => /^ag-\d{4}\.(pdf|docx)$/i.test(f)).sort().reverse();
 ---
 <Layout title="Administration" description="Mise à jour des documents du site">
-  <PageHeader title="Mise à jour du site" kicker="Espace syndic" intro="Déposez ici le nouveau tableau des charges ou le dernier compte rendu d'AG. Le site se met à jour tout seul en une minute." />
+  <PageHeader title="Mise à jour du site" kicker="Espace syndic" intro="Comptes de l'exercice, compte rendu d'AG et documents. Réservé au syndic." />
+  <section class="pad tight" style="padding-bottom:0"><div class="wrap" style="display:flex;justify-content:flex-end"><a href="/admin-deconnexion" class="btn ghost" style="min-height:40px;font-size:14px">Quitter l'espace syndic</a></div></section>
 
   <section class="pad tight" style="padding-bottom:0"><div class="wrap">
     <div class="tabs" role="tablist" aria-label="Sections de l'administration">
@@ -69,7 +70,6 @@ const archives = readdirSync('public/docs/archives').filter(f => /^ag-\d{4}\.(pd
       </div>
 
       <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px">
-        <div class="field" style="margin:0;flex:1 1 220px"><label for="c-pwd">Mot de passe administrateur</label><input id="c-pwd" type="password" autocomplete="current-password"></div>
         <div class="field" style="margin:0;flex:1 1 220px"><label for="c-note">Commentaire (facultatif)</label><input id="c-note" maxlength="120" placeholder="ex. règlements de décembre"></div>
         <button type="button" class="btn sun" id="c-save" style="margin-top:22px">Enregistrer</button>
       </div>
@@ -79,10 +79,6 @@ const archives = readdirSync('public/docs/archives').filter(f => /^ag-\d{4}\.(pd
 
   <section class="pad tight tabpane" data-pane="docs" hidden><div class="wrap split">
     <form id="up" class="box" style="flex:2 1 520px;display:flex;flex-direction:column;gap:18px">
-      <div class="field" style="margin:0">
-        <label for="pwd">Mot de passe administrateur</label>
-        <input id="pwd" type="password" autocomplete="current-password" required>
-      </div>
 
       <fieldset style="border:0;padding:0;margin:0;display:flex;flex-direction:column;gap:10px">
         <legend style="font-weight:800;font-size:14px;margin-bottom:6px">Que voulez-vous mettre à jour ?</legend>
@@ -182,9 +178,9 @@ const archives = readdirSync('public/docs/archives').filter(f => /^ag-\d{4}\.(pd
     document.querySelectorAll('button.add').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.t;if(k==='rec')D.recettes.push({nom:'',montant:0,appel:0,internet:0,internetNote:''});else (k==='fb'?D.fraisBureau:D.depenses).push({poste:'',montant:0});render();const tb=document.querySelector('#t-'+k+' tbody');const last=tb.lastElementChild;if(last)last.querySelector('input').focus();}));
     function show(text,ok){const m=$('c-msg');m.hidden=false;m.textContent=text;m.style.background=ok?'#E6F4EC':'#FDE2D6';m.style.color=ok?'#1E6E45':'#8A2E0C';}
     $('c-save').addEventListener('click',async()=>{
-      const pwd=$('c-pwd').value||document.getElementById('pwd').value; if(!pwd){show('Saisissez le mot de passe administrateur.',false);return;}
+      
       $('c-save').disabled=true;$('c-save').textContent='Enregistrement…';
-      try{const r=await fetch('/api/comptes',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Password':pwd,'X-Note':encodeURIComponent($('c-note').value.trim())},body:JSON.stringify(D)});const j=await r.json().catch(()=>({}));
+      try{const r=await fetch('/api/comptes',{method:'POST',headers:{'Content-Type':'application/json','X-Note':encodeURIComponent($('c-note').value.trim())},body:JSON.stringify(D)});const j=await r.json().catch(()=>({}));
         if(r.ok&&j.ok)show('✓ '+j.message,true);else show(j.error||('Erreur '+r.status),false);
       }catch(e){show('Erreur réseau : '+e,false);}
       $('c-save').disabled=false;$('c-save').textContent='Enregistrer';
@@ -219,21 +215,19 @@ const archives = readdirSync('public/docs/archives').filter(f => /^ag-\d{4}\.(pd
   </script>
   <script is:inline>
     document.querySelectorAll('button.del').forEach(b=>b.addEventListener('click',async()=>{
-      const f=b.dataset.file; const pwd=document.getElementById('pwd').value;
-      if(!pwd){alert('Saisissez d’abord le mot de passe administrateur (en haut du formulaire).');return;}
+      const f=b.dataset.file;
       if(!confirm('Supprimer définitivement l’archive '+f+' du site ?')) return;
       b.disabled=true; b.textContent='…';
-      try{const r=await fetch('/api/upload',{method:'POST',headers:{'X-Action':'delete','X-File':f,'X-Admin-Password':pwd}});const j=await r.json().catch(()=>({}));
+      try{const r=await fetch('/api/upload',{method:'POST',headers:{'X-Action':'delete','X-File':f}});const j=await r.json().catch(()=>({}));
         if(r.ok&&j.ok){b.closest('li').remove(); const m=document.getElementById('msg'); m.hidden=false; m.textContent='✓ '+j.message; m.style.background='#E6F4EC'; m.style.color='#1E6E45';}
         else{alert(j.error||('Erreur '+r.status)); b.disabled=false; b.textContent='Supprimer';}
       }catch(e){alert('Erreur réseau : '+e); b.disabled=false; b.textContent='Supprimer';}
     }));
     document.querySelectorAll('button.undo').forEach(b=>b.addEventListener('click',async()=>{
-      const pwd=document.getElementById('pwd').value;
-      if(!pwd){alert('Saisissez d’abord le mot de passe administrateur (en haut du formulaire).');return;}
+      
       if(!confirm('Remettre la version précédente de « '+b.dataset.label+' » ? Le dernier envoi sera annulé.')) return;
       b.disabled=true; b.textContent='…';
-      try{const r=await fetch('/api/upload',{method:'POST',headers:{'X-Action':'restore','X-Target':b.dataset.target,'X-Admin-Password':pwd}});const j=await r.json().catch(()=>({}));
+      try{const r=await fetch('/api/upload',{method:'POST',headers:{'X-Action':'restore','X-Target':b.dataset.target}});const j=await r.json().catch(()=>({}));
         const m=document.getElementById('msg'); m.hidden=false;
         if(r.ok&&j.ok){m.textContent='✓ '+j.message; m.style.background='#E6F4EC'; m.style.color='#1E6E45';}
         else{m.textContent=j.error||('Erreur '+r.status); m.style.background='#FDE2D6'; m.style.color='#8A2E0C';}
@@ -255,7 +249,7 @@ const archives = readdirSync('public/docs/archives').filter(f => /^ag-\d{4}\.(pd
       if(f.size>4*1024*1024){show('Fichier trop volumineux (4 Mo maximum).',false);return;}
       send.disabled=true; send.textContent='Envoi en cours…'; msg.hidden=true;
       try{
-        const r=await fetch('/api/upload',{method:'POST',headers:{'Content-Type':'application/octet-stream','X-Admin-Password':document.getElementById('pwd').value,'X-Target':form.target.value,'X-Filename':encodeURIComponent(f.name),'X-Year':document.getElementById('year').value.trim(),'X-Note':encodeURIComponent(document.getElementById('note').value.trim())},body:f});
+        const r=await fetch('/api/upload',{method:'POST',headers:{'Content-Type':'application/octet-stream','X-Target':form.target.value,'X-Filename':encodeURIComponent(f.name),'X-Year':document.getElementById('year').value.trim(),'X-Note':encodeURIComponent(document.getElementById('note').value.trim())},body:f});
         const j=await r.json().catch(()=>({}));
         if(r.ok&&j.ok){show('✓ '+j.message,true); fileIn.value='';}
         else show(j.error||('Erreur '+r.status),false);
