@@ -4,125 +4,125 @@
  "recettes": [
   {
    "nom": "PANIGHI",
-   "montant": 0.0,
-   "appel": 0.0,
-   "internet": 70.0,
+   "montant": 0,
+   "appel": 0,
+   "internet": 70,
    "internetNote": ""
   },
   {
    "nom": "BONUGLI JC",
-   "montant": 380.0,
-   "appel": 0.0,
-   "internet": 70.0,
+   "montant": 380,
+   "appel": 0,
+   "internet": 70,
    "internetNote": ""
   },
   {
    "nom": "BONUGLI G.",
-   "montant": 380.0,
-   "appel": 0.0,
-   "internet": 70.0,
+   "montant": 380,
+   "appel": 0,
+   "internet": 70,
    "internetNote": ""
   },
   {
    "nom": "FERNANDEZ",
-   "montant": 0.0,
-   "appel": 0.0,
-   "internet": 0.0,
+   "montant": 380,
+   "appel": 0,
+   "internet": 0,
    "internetNote": "Non souscrit"
   },
   {
    "nom": "CROUIN",
-   "montant": 380.0,
-   "appel": 0.0,
-   "internet": 70.0,
+   "montant": 380,
+   "appel": 0,
+   "internet": 70,
    "internetNote": ""
   },
   {
    "nom": "LAMARRA",
-   "montant": 0.0,
-   "appel": 0.0,
-   "internet": 70.0,
+   "montant": 0,
+   "appel": 0,
+   "internet": 70,
    "internetNote": ""
   },
   {
    "nom": "CASABIANCA",
-   "montant": 380.0,
-   "appel": 0.0,
-   "internet": 70.0,
+   "montant": 380,
+   "appel": 0,
+   "internet": 70,
    "internetNote": ""
   },
   {
    "nom": "RIBOTTA P.",
-   "montant": 380.0,
-   "appel": 0.0,
-   "internet": 70.0,
+   "montant": 380,
+   "appel": 0,
+   "internet": 70,
    "internetNote": ""
   },
   {
    "nom": "BALMENS",
-   "montant": 380.0,
-   "appel": 0.0,
-   "internet": 70.0,
+   "montant": 380,
+   "appel": 0,
+   "internet": 70,
    "internetNote": ""
   },
   {
    "nom": "CROUIN",
-   "montant": 380.0,
-   "appel": 0.0,
-   "internet": 0.0,
+   "montant": 380,
+   "appel": 0,
+   "internet": 0,
    "internetNote": "-"
   },
   {
    "nom": "RIBOTTA JP.",
-   "montant": 380.0,
-   "appel": 0.0,
-   "internet": 70.0,
+   "montant": 380,
+   "appel": 0,
+   "internet": 70,
    "internetNote": ""
   },
   {
    "nom": "DECHEN",
-   "montant": 380.0,
-   "appel": 0.0,
-   "internet": 70.0,
+   "montant": 380,
+   "appel": 0,
+   "internet": 70,
    "internetNote": ""
   }
  ],
  "prevu": {
-  "montant": 4560.0,
-  "internet": 700.0
+  "montant": 4560,
+  "internet": 700
  },
  "avanceProvision": 2374.76,
  "avoirInternet": 432.8,
  "avoirInternetDate": "02/11",
- "interetsLivret": 0.0,
+ "interetsLivret": 0,
  "fraisBureau": [
   {
    "poste": "Téléphone (forfait fixe)",
-   "montant": 0.0
+   "montant": 0
   },
   {
    "poste": "Timbres",
-   "montant": 0.0
+   "montant": 0
   },
   {
    "poste": "Gestion",
-   "montant": 0.0
+   "montant": 0
   },
   {
    "poste": "Poste – lettre suivie",
-   "montant": 0.0
+   "montant": 0
   },
   {
    "poste": "Gestion syndic",
-   "montant": 0.0
+   "montant": 0
   },
   {
    "poste": "Poste",
-   "montant": 0.0
+   "montant": 0
   },
   {
    "poste": "Enveloppes",
-   "montant": 0.0
+   "montant": 0
   },
   {
    "poste": "Frais AG",
@@ -130,19 +130,19 @@
   },
   {
    "poste": "Recommandés AR",
-   "montant": 0.0
+   "montant": 0
   },
   {
    "poste": "Dossiers et chemises",
-   "montant": 0.0
+   "montant": 0
   },
   {
    "poste": "Encre et papier",
-   "montant": 0.0
+   "montant": 0
   },
   {
    "poste": "Divers",
-   "montant": 0.0
+   "montant": 0
   }
  ],
  "depenses": [
@@ -156,15 +156,15 @@
   },
   {
    "poste": "Dépannage TV",
-   "montant": 0.0
+   "montant": 0
   },
   {
    "poste": "Jardinier - démaquisage",
-   "montant": 1020.0
+   "montant": 1020
   },
   {
    "poste": "Remplacement borne Wi-Fi",
-   "montant": 0.0
+   "montant": 0
   },
   {
    "poste": "Frais de tenue compte+videoposte(2 trimestres)",
@@ -172,43 +172,43 @@
   },
   {
    "poste": "EDF (1er et 2e semestre)",
-   "montant": 113.0
+   "montant": 113
   },
   {
    "poste": "Réducteur de pression",
-   "montant": 17.0
+   "montant": 17
   },
   {
    "poste": "Piquets fer pour rambarde - papier verre",
-   "montant": 0.0
+   "montant": 0
   },
   {
    "poste": "Divers produits -ciment colle - clips - spot -adhesif- spot jardin",
-   "montant": 0.0
+   "montant": 0
   },
   {
    "poste": "Désherbant - anti fourmis - soude - engrais",
-   "montant": 0.0
+   "montant": 0
   },
   {
    "poste": "Taxe spéciale CCP 2025 & 2026",
-   "montant": 0.0
+   "montant": 0
   },
   {
    "poste": "Sacs- bacs de rangement - truelle - barre de sol",
-   "montant": 0.0
+   "montant": 0
   },
   {
    "poste": "Remboursement pour JCB",
-   "montant": 0.0
+   "montant": 0
   },
   {
    "poste": "Projecteur LED - cutter - bande de sol - sac pop up",
-   "montant": 0.0
+   "montant": 0
   },
   {
    "poste": "Divers",
-   "montant": 0.0
+   "montant": 0
   },
   {
    "poste": "Internet (abonnement, depuis juillet)",
